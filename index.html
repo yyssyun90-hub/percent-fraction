@@ -28,15 +28,6 @@
             z-index: 0;
         }
         
-        /* 浮动装饰元素 */
-        .floating-orb {
-            position: fixed;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(251,191,36,0.15), transparent);
-            pointer-events: none;
-            z-index: 0;
-        }
-        
         .stars {
             position: fixed;
             top: 0;
@@ -143,11 +134,49 @@
         .tab-content { display: none; padding: 28px; background: rgba(255,255,255,0.5); border-radius: 0 0 48px 48px; }
         .tab-content.active { display: block; }
         
-        /* 分数竖式样式 */
-        .mixed-v { display: inline-flex; align-items: center; gap: 6px; font-weight: bold; }
-        .fraction-v { display: inline-flex; flex-direction: column; align-items: center; vertical-align: middle; }
-        .fraction-v .num { border-bottom: 2px solid #f59e0b; padding: 0 8px; font-size: 1.1rem; }
-        .fraction-v .den { padding: 0 8px; font-size: 1.1rem; }
+        /* ========== 分数竖式样式 - 核心 ========== */
+        .fraction-v {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            vertical-align: middle;
+            font-weight: bold;
+        }
+        .fraction-v .num {
+            border-bottom: 2px solid #f59e0b;
+            padding: 0 6px;
+            font-size: 1rem;
+            line-height: 1.2;
+        }
+        .fraction-v .den {
+            padding: 0 6px;
+            font-size: 1rem;
+            line-height: 1.2;
+        }
+        /* 大号竖式分数（用于题目显示） */
+        .fraction-v-large .num,
+        .fraction-v-large .den {
+            font-size: 1.6rem;
+            padding: 0 10px;
+        }
+        .fraction-v-large .num {
+            border-bottom-width: 3px;
+        }
+        /* 带分数样式 */
+        .mixed-v {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: bold;
+        }
+        .mixed-v .whole {
+            font-size: 1rem;
+        }
+        .mixed-v-large .whole {
+            font-size: 1.6rem;
+        }
+        
         .btn-fraction {
             background: linear-gradient(135deg, #fef3c7, #fffbeb);
             border: 1px solid #fde68a;
@@ -220,8 +249,26 @@
         }
         @keyframes fadeOut { 0% { opacity: 1; transform: translate(-50%, -50%) scale(0.8);} 80%{ opacity: 1;} 100%{ opacity: 0; visibility: hidden;}}
         
-        .quiz-table { width: 100%; border-collapse: collapse; background: rgba(255,255,255,0.9); border-radius: 24px; overflow: hidden; margin-top: 16px; color: #1e293b; box-shadow: 0 2px 8px rgba(0,0,0,0.05);}
-        .quiz-table th, .quiz-table td { border: 1px solid #fde68a; padding: 12px 8px; text-align: center; }
+        .quiz-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(255,255,255,0.9);
+            border-radius: 24px;
+            overflow: hidden;
+            margin-top: 16px;
+            color: #1e293b;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .quiz-table th, .quiz-table td {
+            border: 1px solid #fde68a;
+            padding: 12px 8px;
+            text-align: center;
+            vertical-align: middle;
+        }
+        .quiz-table .fraction-v .num,
+        .quiz-table .fraction-v .den {
+            font-size: 0.85rem;
+        }
         .correct-ans { background: rgba(34,197,94,0.2); }
         .wrong-ans { background: rgba(239,68,68,0.1); }
         
@@ -295,12 +342,81 @@
         }
         .certificate h1 { font-size: 2rem; color: #b45309; margin-top: 20px; margin-bottom: 12px; }
         .certificate .student-name { font-size: 2rem; font-weight: 800; color: #1e3a8a; background: #fef3c7; display: inline-block; padding: 10px 36px; border-radius: 60px; margin: 18px 0; border: 2px dashed #f59e0b; }
-        .certificate .score { font-size: 2rem; font-weight: bold; color: #ea580c; margin: 12px 0; }
+        .certificate .score { font-size: 1.8rem; font-weight: bold; color: #ea580c; margin: 12px 0; }
         .certificate .level { font-size: 1.3rem; font-weight: bold; background: #fbbf24; display: inline-block; padding: 8px 32px; border-radius: 60px; margin: 15px 0; color: #422006; }
         .certificate .date { color: #78716c; font-size: 0.9rem; margin-top: 24px; border-top: 1px solid #fed7aa; padding-top: 20px; }
         .certificate-buttons { display: flex; gap: 20px; justify-content: center; margin-top: 25px; }
         .close-certificate { position: absolute; top: 15px; right: 25px; font-size: 1.8rem; cursor: pointer; color: #a16207; background: none; width: auto; padding: 0; line-height: 1; }
         .close-certificate:hover { color: #ea580c; transform: scale(1.1);}
+        
+        /* 教师报告中的竖式分数 */
+        .teacher-log-fraction {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            vertical-align: middle;
+        }
+        .teacher-log-fraction .num {
+            border-bottom: 1px solid #92400e;
+            padding: 0 3px;
+            font-size: 0.7rem;
+        }
+        .teacher-log-fraction .den {
+            padding: 0 3px;
+            font-size: 0.7rem;
+        }
+        
+        /* 密码弹窗样式 */
+        .password-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(8px);
+            z-index: 3000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .password-modal {
+            background: white;
+            border-radius: 48px;
+            padding: 32px;
+            text-align: center;
+            max-width: 350px;
+            width: 90%;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            border: 2px solid #f59e0b;
+        }
+        .password-modal h3 {
+            color: #b45309;
+            margin-bottom: 16px;
+            font-size: 1.3rem;
+        }
+        .password-modal input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border: 2px solid #fde68a;
+            border-radius: 60px;
+            text-align: center;
+            margin-bottom: 16px;
+            outline: none;
+        }
+        .password-modal input:focus {
+            border-color: #f59e0b;
+        }
+        .password-modal button {
+            margin: 5px;
+            padding: 10px 20px;
+        }
+        .password-error {
+            color: #dc2626;
+            font-size: 0.85rem;
+            margin-top: 8px;
+        }
         
         @media (max-width: 700px) {
             .square-grid { grid-template-columns: repeat(10, 22px); gap: 2px; padding: 10px; }
@@ -311,6 +427,10 @@
             .certificate { padding: 25px 18px; }
             .certificate h1 { font-size: 1.3rem; }
             .student-name { font-size: 1.2rem; }
+            .fraction-v-large .num,
+            .fraction-v-large .den {
+                font-size: 1.2rem;
+            }
         }
     </style>
 </head>
@@ -371,7 +491,64 @@
 </div>
 
 <script>
-    // ----------------------------- 多语言字典 -----------------------------
+    // ==================== 教师密码验证函数 ====================
+    const TEACHER_PASSWORD = "ALIABU";
+    
+    function verifyTeacherPassword(callback) {
+        // 创建密码输入弹窗
+        const overlay = document.createElement('div');
+        overlay.className = 'password-overlay';
+        overlay.innerHTML = `
+            <div class="password-modal">
+                <h3>🔐 Teacher Verification</h3>
+                <p style="margin-bottom: 15px; color: #666;">Please enter the teacher password to clear history.</p>
+                <input type="password" id="teacherPasswordInput" placeholder="Enter password" autocomplete="off">
+                <div style="display: flex; gap: 10px; justify-content: center;">
+                    <button id="passwordSubmitBtn">✓ Confirm</button>
+                    <button id="passwordCancelBtn" style="background: #9ca3af;">✗ Cancel</button>
+                </div>
+                <div id="passwordErrorMsg" class="password-error"></div>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+        
+        const input = overlay.querySelector('#teacherPasswordInput');
+        const submitBtn = overlay.querySelector('#passwordSubmitBtn');
+        const cancelBtn = overlay.querySelector('#passwordCancelBtn');
+        const errorMsg = overlay.querySelector('#passwordErrorMsg');
+        
+        input.focus();
+        
+        function closeModal() {
+            overlay.remove();
+        }
+        
+        function checkPassword() {
+            const enteredPassword = input.value.trim();
+            if (enteredPassword === TEACHER_PASSWORD) {
+                closeModal();
+                if (callback) callback(true);
+            } else {
+                errorMsg.textContent = currentLang === 'en' ? '❌ Incorrect password! Access denied.' : 
+                                       (currentLang === 'zh' ? '❌ 密码错误！访问被拒绝。' : '❌ Kata laluan salah! Akses ditolak.');
+                input.value = '';
+                input.focus();
+                if (callback) callback(false);
+            }
+        }
+        
+        submitBtn.addEventListener('click', checkPassword);
+        cancelBtn.addEventListener('click', () => {
+            closeModal();
+            if (callback) callback(false);
+        });
+        
+        input.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') checkPassword();
+        });
+    }
+    
+    // ==================== 多语言字典 ====================
     const langData = {
         en: { 
             tabLearn:"📖 LEARN", tabPractice:"✏️ PRACTICE", tabChallenge:"⚡ CHALLENGE", tabQuiz:"📝 QUIZ", tabTeacher:"📊 REPORT",
@@ -389,7 +566,8 @@
             certificateTitle:"🏅 CERTIFICATE OF ACHIEVEMENT", certificateSubtitle:"This certificate is proudly presented to",
             certificateScore:"Score", certificateOutOf:"out of", certificateDate:"Date", certificateQuest:"Questions", certificateCorrect:"Correct",
             certificateLevel:["🏆 MASTER","🎓 EXCELLENT","🌟 GOOD","📖 KEEP TRYING"],
-            certSave:"💾 Save as Image", certPrint:"🖨️ Print Certificate", certClose:"✖"
+            certSave:"💾 Save as Image", certPrint:"🖨️ Print Certificate", certClose:"✖",
+            reportMixed:"Mixed Number"
         },
         zh: { 
             tabLearn:"📖 竖式学习", tabPractice:"✏️ 练一练", tabChallenge:"⚡ 挑战赛", tabQuiz:"📝 随堂测验", tabTeacher:"📊 老师报告",
@@ -407,7 +585,8 @@
             certificateTitle:"🏅 学业成就证书", certificateSubtitle:"特此授予",
             certificateScore:"得分", certificateOutOf:"总分", certificateDate:"日期", certificateQuest:"题", certificateCorrect:"正确",
             certificateLevel:["🏆 大师","🎓 优秀","🌟 良好","📖 继续努力"],
-            certSave:"💾 保存为图片", certPrint:"🖨️ 打印证书", certClose:"✖"
+            certSave:"💾 保存为图片", certPrint:"🖨️ 打印证书", certClose:"✖",
+            reportMixed:"带分数"
         },
         ms: { 
             tabLearn:"📖 BELAJAR", tabPractice:"✏️ LATIHAN", tabChallenge:"⚡ CABARAN", tabQuiz:"📝 KUIZ", tabTeacher:"📊 LAPORAN",
@@ -425,7 +604,8 @@
             certificateTitle:"🏅 SIJIL PENCAPAIAN", certificateSubtitle:"Sijil ini diberikan dengan bangganya kepada",
             certificateScore:"Markah", certificateOutOf:"daripada", certificateDate:"Tarikh", certificateQuest:"Soalan", certificateCorrect:"Betul",
             certificateLevel:["🏆 MASTER","🎓 CEMERLANG","🌟 BAIK","📖 TERUS BERUSAHA"],
-            certSave:"💾 Simpan sebagai Imej", certPrint:"🖨️ Cetak Sijil", certClose:"✖"
+            certSave:"💾 Simpan sebagai Imej", certPrint:"🖨️ Cetak Sijil", certClose:"✖",
+            reportMixed:"Nombor Bercampur"
         }
     };
     let currentLang = 'ms';
@@ -480,8 +660,22 @@
     function addPoints(p){ totalScore+=p; updateScoreUI(); showFloatingMsg(`+${p} pts`, true); }
     function showFloatingMsg(msg, good){ let d=document.createElement('div'); d.className='feedback-popup'; d.innerText=msg; d.style.background=good? '#2b6e2b':'#9a3e1a'; document.body.appendChild(d); setTimeout(()=>d.remove(),900);}
 
-    function buildFractionHTML(num, den, className="fraction-v"){ return `<span class="${className}"><span class="num">${num}</span><span class="den">${den}</span></span>`; }
-    function buildMixedHTML(whole, num, den, big=false){ return `<span class="${big?'mixed-v':'mixed-v'}"><span class="whole">${whole}</span>${buildFractionHTML(num, den)}</span>`; }
+    // ========== 竖式分数构建函数 ==========
+    function buildFractionHTML(num, den, className = "fraction-v") {
+        return `<span class="${className}"><span class="num">${num}</span><span class="den">${den}</span></span>`;
+    }
+    
+    function buildMixedHTML(whole, num, den, large = false) {
+        let fractionClass = large ? "fraction-v fraction-v-large" : "fraction-v";
+        let mixedClass = large ? "mixed-v mixed-v-large" : "mixed-v";
+        return `<span class="${mixedClass}"><span class="whole">${whole}</span>${buildFractionHTML(num, den, fractionClass)}</span>`;
+    }
+    
+    // 用于报告中的小号竖式分数
+    function buildSmallFractionHTML(num, den) {
+        return `<span class="teacher-log-fraction"><span class="num">${num}</span><span class="den">${den}</span></span>`;
+    }
+    
     function mixedToPercent(whole, num, den){ let decimal = whole + (num/den); let percent = decimal * 100; return Math.round(percent * 100) / 100; }
 
     let currentWhole=1, currentNum=1, currentDen=2;
@@ -523,7 +717,7 @@
         if(scoreInput !== null){ let score = parseInt(scoreInput); if(!isNaN(score) && score >= 0 && score <= 100){ addPoints(score); localStorage.setItem("latestChallengeScore", score); document.getElementById('latestChallengeScore').innerText = score; document.getElementById('challengeScoreFeedback').innerHTML = currentLang==='en'?`✅ Recorded! +${score} points added!`:(currentLang==='zh'?`✅ 已记录！获得 +${score} 分！`:`✅ Direkod! +${score} mata ditambah!`); setTimeout(()=>{ document.getElementById('challengeScoreFeedback').innerHTML = ''; }, 3000); } else { document.getElementById('challengeScoreFeedback').innerHTML = currentLang==='en'?'❌ Please enter 0-100':(currentLang==='zh'?'❌ 请输入 0-100':'❌ Sila masukkan 0-100'); } }
     });
 
-    // 证书生成模块
+    // 证书生成模块 (使用竖式分数)
     let studentName = localStorage.getItem("studentName") || "";
     function askStudentName() { let name = prompt(currentLang === 'en' ? "Enter your name for the certificate:" : (currentLang === 'zh' ? "请输入您的姓名用于证书:" : "Masukkan nama anda untuk sijil:")); if (name && name.trim() !== "") { studentName = name.trim(); localStorage.setItem("studentName", studentName); } else { studentName = "Student"; } return studentName; }
     function getLevelText(percent) { if (percent >= 90) return t('certificateLevel')[0]; if (percent >= 70) return t('certificateLevel')[1]; if (percent >= 50) return t('certificateLevel')[2]; return t('certificateLevel')[3]; }
@@ -535,31 +729,146 @@
         let dateStr = new Date().toLocaleDateString(currentLang === 'ms' ? 'ms-MY' : (currentLang === 'zh' ? 'zh-CN' : 'en-US'));
         if (!studentName) askStudentName();
         let levelText = getLevelText(percent);
-        let certHTML = `<div class="certificate-container" id="certificateContainer"><div class="certificate"><button class="close-certificate" id="closeCertificateBtn">✖</button><h1>🏅 ${t('certificateTitle')}</h1><p>${t('certificateSubtitle')}</p><div class="student-name">${studentName}</div><div class="score">${t('certificateScore')}: ${score} / ${totalPoints} (${correctCount} / ${totalQuestions} ${t('certificateQuest')} ${t('certificateCorrect')})</div><div class="level">${levelText}</div><div class="date">${t('certificateDate')}: ${dateStr}</div><div class="certificate-buttons"><button id="saveCertBtn">${t('certSave')}</button><button id="printCertBtn">${t('certPrint')}</button></div></div></div>`;
+        
+        // 构建证书中带竖式分数的详情列表
+        let detailsHtml = '';
+        for (let i = 0; i < details.length; i++) {
+            let d = details[i];
+            detailsHtml += `<tr class="${d.isCorrect ? 'correct-ans' : 'wrong-ans'}"><td>${d.mixed}</td><td>${d.userAnswer}%</td><td>${d.correctAnswer}%</td><td>${d.isCorrect ? '✅' : '❌'}</td></tr>`;
+        }
+        
+        let certHTML = `<div class="certificate-container" id="certificateContainer">
+            <div class="certificate">
+                <button class="close-certificate" id="closeCertificateBtn">✖</button>
+                <h1>🏅 ${t('certificateTitle')}</h1>
+                <p>${t('certificateSubtitle')}</p>
+                <div class="student-name">${studentName}</div>
+                <div class="score">${t('certificateScore')}: ${score} / ${totalPoints} (${correctCount} / ${totalQuestions} ${t('certificateQuest')} ${t('certificateCorrect')})</div>
+                <div class="level">${levelText}</div>
+                <div class="date">${t('certificateDate')}: ${dateStr}</div>
+                <div style="margin-top: 20px; max-height: 200px; overflow-y: auto; font-size: 0.8rem;">
+                    <table style="width:100%; border-collapse: collapse; margin-top: 10px;">
+                        <thead><tr><th>${t('reportMixed')}</th><th>Your Answer</th><th>Correct</th><th>Result</th></tr></thead>
+                        <tbody>${detailsHtml}</tbody>
+                    </table>
+                </div>
+                <div class="certificate-buttons">
+                    <button id="saveCertBtn">${t('certSave')}</button>
+                    <button id="printCertBtn">${t('certPrint')}</button>
+                </div>
+            </div>
+        </div>`;
         document.body.insertAdjacentHTML('beforeend', certHTML);
         document.getElementById('closeCertificateBtn').addEventListener('click', () => { document.getElementById('certificateContainer').remove(); });
-        document.getElementById('saveCertBtn').addEventListener('click', () => { html2canvas(document.querySelector('.certificate'), { scale: 2, backgroundColor: '#fffaf0' }).then(canvas => { let link = document.createElement('a'); let date = new Date().toISOString().slice(0,19).replace(/:/g, '-'); link.download = `certificate_${studentName.replace(/\s/g, '_')}_${date}.png`; link.href = canvas.toDataURL(); link.click(); }).catch(err => { alert(currentLang === 'en' ? 'Failed to save image.' : (currentLang === 'zh' ? '保存失败' : 'Gagal menyimpan')); }); });
-        document.getElementById('printCertBtn').addEventListener('click', () => { let printContent = document.querySelector('.certificate').cloneNode(true); let printWindow = window.open('', '_blank'); printWindow.document.write(`<html><head><title>Certificate</title><style>body{display:flex;justify-content:center;align-items:center;min-height:100vh;background:white;font-family:sans-serif;margin:0;padding:20px;}.certificate{max-width:700px;width:100%;background:linear-gradient(145deg,#fffaf0,#fffbeb);border-radius:48px;padding:40px 30px;text-align:center;border:8px solid #fbbf24;}.certificate h1{color:#b45309;}.student-name{font-size:2rem;font-weight:bold;color:#1e3a8a;background:#fef3c7;display:inline-block;padding:10px 36px;border-radius:60px;border:2px dashed #f59e0b;}.score{font-size:2rem;color:#ea580c;}.level{background:#fbbf24;display:inline-block;padding:8px 32px;border-radius:60px;}.certificate-buttons{display:none;}.close-certificate{display:none;}</style></head><body>${printContent.outerHTML}</body></html>`); printWindow.document.close(); printWindow.print(); printWindow.close(); });
+        document.getElementById('saveCertBtn').addEventListener('click', () => { 
+            html2canvas(document.querySelector('.certificate'), { scale: 2, backgroundColor: '#fffaf0' }).then(canvas => { 
+                let link = document.createElement('a'); 
+                let date = new Date().toISOString().slice(0,19).replace(/:/g, '-'); 
+                link.download = `certificate_${studentName.replace(/\s/g, '_')}_${date}.png`; 
+                link.href = canvas.toDataURL(); 
+                link.click(); 
+            }).catch(err => { alert(currentLang === 'en' ? 'Failed to save image.' : (currentLang === 'zh' ? '保存失败' : 'Gagal menyimpan')); }); 
+        });
+        document.getElementById('printCertBtn').addEventListener('click', () => { 
+            let printContent = document.querySelector('.certificate').cloneNode(true); 
+            let printWindow = window.open('', '_blank'); 
+            printWindow.document.write(`<html><head><title>Certificate</title><style>
+                body{display:flex;justify-content:center;align-items:center;min-height:100vh;background:white;font-family:sans-serif;margin:0;padding:20px;}
+                .certificate{max-width:700px;width:100%;background:linear-gradient(145deg,#fffaf0,#fffbeb);border-radius:48px;padding:40px 30px;text-align:center;border:8px solid #fbbf24;}
+                .certificate h1{color:#b45309;}.student-name{font-size:2rem;font-weight:bold;color:#1e3a8a;background:#fef3c7;display:inline-block;padding:10px 36px;border-radius:60px;border:2px dashed #f59e0b;}
+                .score{font-size:2rem;color:#ea580c;}.level{background:#fbbf24;display:inline-block;padding:8px 32px;border-radius:60px;}
+                .fraction-v{display:inline-flex;flex-direction:column;align-items:center;}.fraction-v .num{border-bottom:1px solid #f59e0b;padding:0 3px;}.certificate-buttons{display:none;}.close-certificate{display:none;}
+                .teacher-log-fraction{display:inline-flex;flex-direction:column;align-items:center;}.teacher-log-fraction .num{border-bottom:1px solid #92400e;padding:0 3px;}
+            </style></head><body>${printContent.outerHTML}</body></html>`); 
+            printWindow.document.close(); 
+            printWindow.print(); 
+            printWindow.close(); 
+        });
     }
 
-    // 测验模块
+    // 测验模块 (使用竖式分数显示报告)
     let quizQuestions=[], quizUserAnswers=[], quizCurrentIdx=0, quizStarted=false, quizHistory=JSON.parse(localStorage.getItem("mixedQuizHistory")) || [];
     function generateQuiz(){ let qs=[]; for(let i=0;i<5;i++){ let whole=Math.floor(Math.random()*3)+1; let den=goodDenominators[Math.floor(Math.random()*goodDenominators.length)]; let num=Math.floor(Math.random()*(den-1))+1; if(num<1) num=1; qs.push({whole, num, den, correct:mixedToPercent(whole,num,den)}); } return qs; }
     function renderQuizQuestion(){ let q=quizQuestions[quizCurrentIdx]; document.getElementById('quizQuestionText').innerHTML = buildMixedHTML(q.whole, q.num, q.den, true); document.getElementById('quizAnswer').value=''; document.getElementById('quizFeedback').innerHTML=''; let qPrefix = currentLang==='en'?'Question':(currentLang==='zh'?'第':'Soalan'); document.getElementById('quizQPrefix').innerHTML = `${qPrefix} ${quizCurrentIdx+1} / 5`; }
     function finishQuiz(){
-        let total=0, details=[]; for(let i=0;i<quizQuestions.length;i++){ let q=quizQuestions[i]; let userVal=quizUserAnswers[i]; let isCorrect=(Math.abs(userVal - q.correct)<0.01); if(isCorrect) total+=10; details.push({mixed:`${q.whole} ${q.num}/${q.den}`, userAnswer:userVal, correctAnswer:q.correct, isCorrect}); }
-        let record = { timestamp: new Date().toLocaleString(), score:total, details:details }; quizHistory.unshift(record); localStorage.setItem("mixedQuizHistory", JSON.stringify(quizHistory)); displayQuizReport(record);
-        document.getElementById('quizPanel').style.display='none'; document.getElementById('quizReportArea').style.display='block'; document.getElementById('quizSetupPanel').style.display='block'; quizStarted=false; updateTeacherLogDisplay(); addPoints(total);
+        let total=0, details=[]; 
+        for(let i=0;i<quizQuestions.length;i++){ 
+            let q=quizQuestions[i]; 
+            let userVal=quizUserAnswers[i]; 
+            let isCorrect=(Math.abs(userVal - q.correct)<0.01); 
+            if(isCorrect) total+=10; 
+            let fractionDisplay = buildSmallFractionHTML(q.num, q.den);
+            let mixedDisplay = `<span class="mixed-v"><span class="whole">${q.whole}</span>${fractionDisplay}</span>`;
+            details.push({mixed: mixedDisplay, mixedRaw: `${q.whole} ${q.num}/${q.den}`, userAnswer:userVal, correctAnswer:q.correct, isCorrect}); 
+        }
+        let record = { timestamp: new Date().toLocaleString(), score:total, details:details }; 
+        quizHistory.unshift(record); 
+        localStorage.setItem("mixedQuizHistory", JSON.stringify(quizHistory)); 
+        displayQuizReport(record);
+        document.getElementById('quizPanel').style.display='none'; 
+        document.getElementById('quizReportArea').style.display='block'; 
+        document.getElementById('quizSetupPanel').style.display='block'; 
+        quizStarted=false; 
+        updateTeacherLogDisplay(); 
+        addPoints(total);
         showCertificate(total, 50, details);
     }
-    function displayQuizReport(record){ let reportTitle = currentLang==='en'?'Quiz Report':(currentLang==='zh'?'测验报告':'Laporan Kuiz'); let html=`<div class="quiz-report"><h3>📋 ${reportTitle} (${record.timestamp})</h3><table class="quiz-table"><thead><tr><th>Mixed Number</th><th>Your Answer</th><th>Correct</th><th>Result</th></tr></thead><tbody>`; record.details.forEach(d=>{ html+=`<tr class="${d.isCorrect?'correct-ans':'wrong-ans'}"><td>${d.mixed}</td><td>${d.userAnswer}%</td》《td>${d.correctAnswer}%</td》《td>${d.isCorrect?'✅':'❌'}</td></tr>`; }); html+=`</tbody></table><p><strong>Total: ${record.score}/50</strong></p><button id="exportQuizBtn">📎 ${t('exportCSV')}</button></div>`; document.getElementById('quizReportArea').innerHTML = html; document.getElementById('exportQuizBtn')?.addEventListener('click',()=>{ let csv=[["Mixed Number","YourAnswer%","CorrectAnswer%","Result"]]; record.details.forEach(d=>{ csv.push([d.mixed, d.userAnswer+"%", d.correctAnswer+"%", d.isCorrect?"Correct":"Wrong"]); }); let blob=new Blob(["\uFEFF"+csv.map(r=>r.join(",")).join("\n")],{type:"text/csv"}); let a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`mixed_quiz.csv`; a.click(); URL.revokeObjectURL(a.href); }); }
+    function displayQuizReport(record){ 
+        let reportTitle = currentLang==='en'?'Quiz Report':(currentLang==='zh'?'测验报告':'Laporan Kuiz'); 
+        let html=`<div class="quiz-report"><h3>📋 ${reportTitle} (${record.timestamp})</h3><table class="quiz-table"><thead><tr><th>${t('reportMixed')}</th><th>Your Answer</th><th>Correct</th><th>Result</th></tr></thead><tbody>`;
+        record.details.forEach(d=>{ 
+            html+=`<tr class="${d.isCorrect?'correct-ans':'wrong-ans'}"><td>${d.mixed}</td><td>${d.userAnswer}%</td》《td>${d.correctAnswer}%</td》《td>${d.isCorrect?'✅':'❌'}</td></tr>`; 
+        });
+        html+=`</tbody></table><p><strong>Total: ${record.score}/50</strong></p><button id="exportQuizBtn">📎 ${t('exportCSV')}</button></div>`;
+        document.getElementById('quizReportArea').innerHTML = html; 
+        document.getElementById('exportQuizBtn')?.addEventListener('click',()=>{ 
+            let csv=[["Mixed Number","YourAnswer%","CorrectAnswer%","Result"]]; 
+            record.details.forEach(d=>{ csv.push([d.mixedRaw, d.userAnswer+"%", d.correctAnswer+"%", d.isCorrect?"Correct":"Wrong"]); }); 
+            let blob=new Blob(["\uFEFF"+csv.map(r=>r.join(",")).join("\n")],{type:"text/csv"}); 
+            let a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`mixed_quiz.csv`; a.click(); URL.revokeObjectURL(a.href); 
+        }); 
+    }
     function startQuiz(){ if(!studentName) askStudentName(); quizQuestions = generateQuiz(); quizUserAnswers = new Array(5).fill(null); quizCurrentIdx=0; quizStarted=true; document.getElementById('quizSetupPanel').style.display='none'; document.getElementById('quizPanel').style.display='block'; document.getElementById('quizReportArea').style.display='none'; renderQuizQuestion(); }
     function submitQuizAnswer(){ if(!quizStarted) return; let userVal=parseFloat(document.getElementById('quizAnswer').value.trim().replace('%','')); if(isNaN(userVal)){ document.getElementById('quizFeedback').innerHTML=currentLang==='en'?'Enter a number':'请输入数字'; return; } quizUserAnswers[quizCurrentIdx] = userVal; if(quizCurrentIdx+1 < quizQuestions.length){ quizCurrentIdx++; renderQuizQuestion(); } else { finishQuiz(); } }
     document.getElementById('startQuizBtn').addEventListener('click',startQuiz);
     document.getElementById('submitQuizBtn').addEventListener('click',submitQuizAnswer);
 
-    function updateTeacherLogDisplay(){ let container = document.getElementById('teacherLogArea'); let noHistoryMsg = currentLang==='en'?'✨ No quiz history yet':(currentLang==='zh'?'✨ 暂无测验记录':'✨ Tiada rekod kuiz lagi'); if(!quizHistory.length){ container.innerHTML=`<p>${noHistoryMsg}</p>`; return; } let html = `<div><table class="quiz-table"><thead><tr><th>Time</th><th>Score</th><th>Details</th></tr></thead><tbody>`; quizHistory.forEach(rec=>{ let detailShort = rec.details.map(d=>`${d.mixed} ${d.isCorrect?'✓':'✗'}`).join(', '); html+=`<tr><td>${rec.timestamp}</td><td>${rec.score}/50</td》《td>${detailShort}</td></tr>`; }); html+=`</tbody></table><button id="exportAllHistBtn">📎 ${t('exportCSV')} (ALL)</button></div>`; container.innerHTML = html; document.getElementById('exportAllHistBtn')?.addEventListener('click',()=>{ let csv=[["Time","Score","Details"]]; quizHistory.forEach(rec=>{ let detail=rec.details.map(d=>`${d.mixed}:${d.isCorrect?'correct':'wrong'}`).join(";"); csv.push([rec.timestamp, rec.score, detail]); }); let blob=new Blob(["\uFEFF"+csv.map(r=>r.join(",")).join("\n")],{type:"text/csv"}); let a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`mixed_history.csv`; a.click(); URL.revokeObjectURL(a.href); }); }
-    document.getElementById('clearHistoryBtn').addEventListener('click',()=>{ if(confirm(currentLang==='en'?'Clear all?':(currentLang==='zh'?'清除所有？':'Padam semua?'))){ quizHistory=[]; localStorage.removeItem("mixedQuizHistory"); updateTeacherLogDisplay(); } });
+    // 教师报告 (使用竖式分数 + 密码保护)
+    function updateTeacherLogDisplay(){ 
+        let container = document.getElementById('teacherLogArea'); 
+        let noHistoryMsg = currentLang==='en'?'✨ No quiz history yet':(currentLang==='zh'?'✨ 暂无测验记录':'✨ Tiada rekod kuiz lagi'); 
+        if(!quizHistory.length){ container.innerHTML=`<p>${noHistoryMsg}</p>`; return; } 
+        let html = `<div><table class="quiz-table"><thead><tr><th>Time</th><th>Score</th><th>Details</th></tr></thead><tbody>`;
+        quizHistory.forEach(rec=>{ 
+            let detailShort = rec.details.map(d=>`${d.mixed} ${d.isCorrect?'✓':'✗'}`).join(', '); 
+            html+=`<tr><td>${rec.timestamp}</td><td>${rec.score}/50</td><td>${detailShort}</td></tr>`; 
+        });
+        html+=`</tbody></table><button id="exportAllHistBtn">📎 ${t('exportCSV')} (ALL)</button></div>`;
+        container.innerHTML = html; 
+        document.getElementById('exportAllHistBtn')?.addEventListener('click',()=>{ 
+            let csv=[["Time","Score","Details"]]; 
+            quizHistory.forEach(rec=>{ let detail=rec.details.map(d=>`${d.mixedRaw}:${d.isCorrect?'correct':'wrong'}`).join(";"); csv.push([rec.timestamp, rec.score, detail]); }); 
+            let blob=new Blob(["\uFEFF"+csv.map(r=>r.join(",")).join("\n")],{type:"text/csv"}); 
+            let a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`mixed_history.csv`; a.click(); URL.revokeObjectURL(a.href); 
+        }); 
+    }
+    
+    // 清除历史按钮 - 添加密码保护
+    document.getElementById('clearHistoryBtn').addEventListener('click', () => {
+        verifyTeacherPassword((success) => {
+            if (success) {
+                if (confirm(currentLang === 'en' ? 'Are you sure you want to clear ALL quiz history? This cannot be undone.' : 
+                           (currentLang === 'zh' ? '确定要清除所有测验记录吗？此操作不可撤销。' : 'Adakah anda pasti mahu memadam SEMUA rekod kuiz? Tindakan ini tidak boleh dibatalkan.'))) {
+                    quizHistory = [];
+                    localStorage.removeItem("mixedQuizHistory");
+                    updateTeacherLogDisplay();
+                    showFloatingMsg(currentLang === 'en' ? '✅ History cleared!' : (currentLang === 'zh' ? '✅ 历史记录已清除！' : '✅ Sejarah dipadam!'), true);
+                }
+            } else {
+                // 密码错误时已经有提示，不需要额外操作
+            }
+        });
+    });
 
     document.querySelectorAll('.tab-btn').forEach(btn=>{ btn.addEventListener('click',()=>{ let tab=btn.dataset.tab; document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active')); document.getElementById(tab+'Tab').classList.add('active'); if(tab==='teacher') updateTeacherLogDisplay(); }); });
     
