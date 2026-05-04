@@ -14,7 +14,6 @@
             position: relative;
         }
         
-        /* 柔和光晕效果 */
         body::before {
             content: '';
             position: fixed;
@@ -57,7 +56,6 @@
             z-index: 10;
         }
         
-        /* 宠物栏 - 明亮版 */
         .pet-bar {
             background: linear-gradient(135deg, #ffffff, #fef9e6);
             border-radius: 60px;
@@ -88,7 +86,6 @@
         .score-value { font-size: 1.6rem; font-weight: bold; line-height: 1; color: #b45309; }
         .score-label { font-size: 0.7rem; opacity: 0.8; letter-spacing: 1px; color: #92400e; }
         
-        /* 主卡片 Gemini风格 - 明亮版 */
         .game-card {
             background: rgba(255, 255, 255, 0.88);
             backdrop-filter: blur(16px);
@@ -96,7 +93,6 @@
             overflow: hidden;
             border: 1px solid rgba(251,191,36,0.5);
             box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15);
-            transition: transform 0.2s;
         }
         .game-header {
             background: linear-gradient(135deg, #f59e0b, #f97316, #fbbf24);
@@ -146,15 +142,14 @@
         .fraction-v .num {
             border-bottom: 2px solid #f59e0b;
             padding: 0 6px;
-            font-size: 1rem;
+            font-size: 0.9rem;
             line-height: 1.2;
         }
         .fraction-v .den {
             padding: 0 6px;
-            font-size: 1rem;
+            font-size: 0.9rem;
             line-height: 1.2;
         }
-        /* 大号竖式分数（用于题目显示） */
         .fraction-v-large .num,
         .fraction-v-large .den {
             font-size: 1.6rem;
@@ -163,18 +158,38 @@
         .fraction-v-large .num {
             border-bottom-width: 3px;
         }
-        /* 带分数样式 */
         .mixed-v {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
+            gap: 4px;
             font-weight: bold;
         }
         .mixed-v .whole {
-            font-size: 1rem;
+            font-size: 0.9rem;
         }
         .mixed-v-large .whole {
             font-size: 1.6rem;
+        }
+        /* 表格内专用小号竖式 */
+        .table-fraction {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            vertical-align: middle;
+        }
+        .table-fraction .num {
+            border-bottom: 1px solid #92400e;
+            padding: 0 3px;
+            font-size: 0.7rem;
+        }
+        .table-fraction .den {
+            padding: 0 3px;
+            font-size: 0.7rem;
+        }
+        .table-mixed {
+            display: inline-flex;
+            align-items: center;
+            gap: 2px;
         }
         
         .btn-fraction {
@@ -265,14 +280,9 @@
             text-align: center;
             vertical-align: middle;
         }
-        .quiz-table .fraction-v .num,
-        .quiz-table .fraction-v .den {
-            font-size: 0.85rem;
-        }
         .correct-ans { background: rgba(34,197,94,0.2); }
         .wrong-ans { background: rgba(239,68,68,0.1); }
         
-        /* 挑战卡片 */
         .challenge-link-card {
             background: linear-gradient(135deg, #fef3c7, #fffbeb, #fde68a);
             border-radius: 56px;
@@ -298,7 +308,6 @@
         }
         .challenge-link-btn:hover { transform: scale(1.03); background: linear-gradient(135deg, #f97316, #ea580c); }
         
-        /* 证书样式 */
         .certificate-container {
             position: fixed;
             top: 0;
@@ -349,23 +358,6 @@
         .close-certificate { position: absolute; top: 15px; right: 25px; font-size: 1.8rem; cursor: pointer; color: #a16207; background: none; width: auto; padding: 0; line-height: 1; }
         .close-certificate:hover { color: #ea580c; transform: scale(1.1);}
         
-        /* 教师报告中的竖式分数 */
-        .teacher-log-fraction {
-            display: inline-flex;
-            flex-direction: column;
-            align-items: center;
-            vertical-align: middle;
-        }
-        .teacher-log-fraction .num {
-            border-bottom: 1px solid #92400e;
-            padding: 0 3px;
-            font-size: 0.7rem;
-        }
-        .teacher-log-fraction .den {
-            padding: 0 3px;
-            font-size: 0.7rem;
-        }
-        
         /* 密码弹窗样式 */
         .password-overlay {
             position: fixed;
@@ -390,33 +382,11 @@
             box-shadow: 0 20px 40px rgba(0,0,0,0.3);
             border: 2px solid #f59e0b;
         }
-        .password-modal h3 {
-            color: #b45309;
-            margin-bottom: 16px;
-            font-size: 1.3rem;
-        }
-        .password-modal input {
-            width: 100%;
-            padding: 12px;
-            font-size: 1rem;
-            border: 2px solid #fde68a;
-            border-radius: 60px;
-            text-align: center;
-            margin-bottom: 16px;
-            outline: none;
-        }
-        .password-modal input:focus {
-            border-color: #f59e0b;
-        }
-        .password-modal button {
-            margin: 5px;
-            padding: 10px 20px;
-        }
-        .password-error {
-            color: #dc2626;
-            font-size: 0.85rem;
-            margin-top: 8px;
-        }
+        .password-modal h3 { color: #b45309; margin-bottom: 16px; font-size: 1.3rem; }
+        .password-modal input { width: 100%; padding: 12px; font-size: 1rem; border: 2px solid #fde68a; border-radius: 60px; text-align: center; margin-bottom: 16px; outline: none; }
+        .password-modal input:focus { border-color: #f59e0b; }
+        .password-modal button { margin: 5px; padding: 10px 20px; }
+        .password-error { color: #dc2626; font-size: 0.85rem; margin-top: 8px; }
         
         @media (max-width: 700px) {
             .square-grid { grid-template-columns: repeat(10, 22px); gap: 2px; padding: 10px; }
@@ -427,10 +397,6 @@
             .certificate { padding: 25px 18px; }
             .certificate h1 { font-size: 1.3rem; }
             .student-name { font-size: 1.2rem; }
-            .fraction-v-large .num,
-            .fraction-v-large .den {
-                font-size: 1.2rem;
-            }
         }
     </style>
 </head>
@@ -457,7 +423,6 @@
             <button class="tab-btn" data-tab="teacher" id="tabTeacherBtn">📊 REPORT</button>
         </div>
 
-        <!-- 学习模式内容 -->
         <div id="learnTab" class="tab-content active">
             <div style="background:rgba(245,158,11,0.08); border-radius: 48px; padding: 20px; text-align:center;">
                 <div style="font-weight:bold; margin-bottom:12px;" id="learnSubtitle">📌 Click a mixed number or type your own:</div>
@@ -473,29 +438,24 @@
             <div style="background:rgba(245,158,11,0.08); border-radius: 32px; padding: 20px; text-align:center;"><div class="result-percent" id="resultPercent">—</div><div id="stepExplanation" style="background:rgba(255,255,255,0.7); border-radius: 28px; padding: 14px; font-size:0.9rem; color:#92400e;"></div></div>
         </div>
 
-        <!-- 练习模式 -->
         <div id="practiceTab" class="tab-content"><div style="text-align:center;"><div class="question-text" id="practiceQuestion" style="font-size:2rem; margin:20px; background:rgba(245,158,11,0.08); border-radius:100px; padding:20px;"></div><div class="practice-input"><input type="text" id="practiceAnswer" placeholder="e.g., 150"><button id="checkPracticeBtn">✅ CHECK</button></div><div id="practiceFeedback"></div><div id="practiceHint"></div><button id="nextPracticeBtn">🎲 NEXT QUESTION</button></div></div>
 
-        <!-- 挑战模式 -->
         <div id="challengeTab" class="tab-content">
             <div class="challenge-link-card"><h2 id="challengeTitle">⚡ PERATUS CHALLENGE ⚡</h2><p id="challengeDesc">Click the button below to start the ZEP Quiz challenge!</p><a href="https://quiz.zep.us/en/play/Jdj3X6" target="_blank" class="challenge-link-btn" id="challengeLinkBtn"> 🚀 GO TO CHALLENGE 🚀 </a><p class="challenge-note" id="challengeNote">💡 Complete the quiz and earn points! Your score will be recorded automatically.</p></div>
             <div style="background:rgba(245,158,11,0.08); border-radius: 32px; padding: 20px; margin-top: 20px; text-align:center;"><div style="font-weight:bold; margin-bottom:12px;" id="recordTitle">📊 Challenge Score Record</div><div><span id="latestScoreLabel">🏆 Latest Challenge Score:</span> <span id="latestChallengeScore" style="font-size:1.5rem; font-weight:bold; color:#ea580c;">—</span></div><button id="recordChallengeScoreBtn" style="margin-top:12px;">✨ Record My Score ✨</button><div id="challengeScoreFeedback" style="margin-top:8px; font-size:0.85rem;"></div></div>
         </div>
 
-        <!-- 测验模块 -->
         <div id="quizTab" class="tab-content"><div id="quizSetupPanel" style="background:rgba(245,158,11,0.08); border-radius: 40px; padding: 20px; text-align:center;"><p id="quizDesc">📋 5 questions, 10 points each. Convert mixed numbers to percent.</p><button id="startQuizBtn">📋 START QUIZ</button></div><div id="quizPanel" style="display:none;"><div id="quizQuestionArea" style="background:rgba(245,158,11,0.08); border-radius: 48px; padding: 24px; text-align:center;"><div id="quizQPrefix">Question</div><div class="question-text" id="quizQuestionText" style="font-size:2rem; margin:20px;"></div><div class="practice-input"><input type="text" id="quizAnswer" placeholder="percent"><button id="submitQuizBtn">✅ SUBMIT</button></div><div id="quizFeedback"></div></div></div><div id="quizReportArea" style="display:none; margin-top:24px;"></div></div>
 
-        <!-- 教师报告 -->
         <div id="teacherTab" class="tab-content"><div id="teacherLogArea" style="background:rgba(245,158,11,0.08); border-radius: 32px; padding: 20px; overflow-x:auto;"><p>✨ No quiz history yet.</p></div><button id="clearHistoryBtn">🗑️ CLEAR HISTORY</button></div>
     </div>
 </div>
 
 <script>
-    // ==================== 教师密码验证函数 ====================
+    // ==================== 教师密码验证 ====================
     const TEACHER_PASSWORD = "ALIABU";
     
     function verifyTeacherPassword(callback) {
-        // 创建密码输入弹窗
         const overlay = document.createElement('div');
         overlay.className = 'password-overlay';
         overlay.innerHTML = `
@@ -519,9 +479,7 @@
         
         input.focus();
         
-        function closeModal() {
-            overlay.remove();
-        }
+        function closeModal() { overlay.remove(); }
         
         function checkPassword() {
             const enteredPassword = input.value.trim();
@@ -538,14 +496,8 @@
         }
         
         submitBtn.addEventListener('click', checkPassword);
-        cancelBtn.addEventListener('click', () => {
-            closeModal();
-            if (callback) callback(false);
-        });
-        
-        input.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') checkPassword();
-        });
+        cancelBtn.addEventListener('click', () => { closeModal(); if (callback) callback(false); });
+        input.addEventListener('keypress', (e) => { if (e.key === 'Enter') checkPassword(); });
     }
     
     // ==================== 多语言字典 ====================
@@ -671,9 +623,9 @@
         return `<span class="${mixedClass}"><span class="whole">${whole}</span>${buildFractionHTML(num, den, fractionClass)}</span>`;
     }
     
-    // 用于报告中的小号竖式分数
-    function buildSmallFractionHTML(num, den) {
-        return `<span class="teacher-log-fraction"><span class="num">${num}</span><span class="den">${den}</span></span>`;
+    // 专门用于表格的小号竖式带分数
+    function buildTableMixedHTML(whole, num, den) {
+        return `<span class="table-mixed"><span class="whole" style="font-size:0.85rem;">${whole}</span><span class="table-fraction"><span class="num">${num}</span><span class="den">${den}</span></span></span>`;
     }
     
     function mixedToPercent(whole, num, den){ let decimal = whole + (num/den); let percent = decimal * 100; return Math.round(percent * 100) / 100; }
@@ -717,7 +669,7 @@
         if(scoreInput !== null){ let score = parseInt(scoreInput); if(!isNaN(score) && score >= 0 && score <= 100){ addPoints(score); localStorage.setItem("latestChallengeScore", score); document.getElementById('latestChallengeScore').innerText = score; document.getElementById('challengeScoreFeedback').innerHTML = currentLang==='en'?`✅ Recorded! +${score} points added!`:(currentLang==='zh'?`✅ 已记录！获得 +${score} 分！`:`✅ Direkod! +${score} mata ditambah!`); setTimeout(()=>{ document.getElementById('challengeScoreFeedback').innerHTML = ''; }, 3000); } else { document.getElementById('challengeScoreFeedback').innerHTML = currentLang==='en'?'❌ Please enter 0-100':(currentLang==='zh'?'❌ 请输入 0-100':'❌ Sila masukkan 0-100'); } }
     });
 
-    // 证书生成模块 (使用竖式分数)
+    // 证书生成模块
     let studentName = localStorage.getItem("studentName") || "";
     function askStudentName() { let name = prompt(currentLang === 'en' ? "Enter your name for the certificate:" : (currentLang === 'zh' ? "请输入您的姓名用于证书:" : "Masukkan nama anda untuk sijil:")); if (name && name.trim() !== "") { studentName = name.trim(); localStorage.setItem("studentName", studentName); } else { studentName = "Student"; } return studentName; }
     function getLevelText(percent) { if (percent >= 90) return t('certificateLevel')[0]; if (percent >= 70) return t('certificateLevel')[1]; if (percent >= 50) return t('certificateLevel')[2]; return t('certificateLevel')[3]; }
@@ -730,11 +682,10 @@
         if (!studentName) askStudentName();
         let levelText = getLevelText(percent);
         
-        // 构建证书中带竖式分数的详情列表
         let detailsHtml = '';
         for (let i = 0; i < details.length; i++) {
             let d = details[i];
-            detailsHtml += `<tr class="${d.isCorrect ? 'correct-ans' : 'wrong-ans'}"><td>${d.mixed}</td><td>${d.userAnswer}%</td><td>${d.correctAnswer}%</td><td>${d.isCorrect ? '✅' : '❌'}</td></tr>`;
+            detailsHtml += `<tr class="${d.isCorrect ? 'correct-ans' : 'wrong-ans'}"><td>${d.mixed}</td><td>${d.userAnswer}%</td》《td>${d.correctAnswer}%</td》《td>${d.isCorrect ? '✅' : '❌'}</td></tr>`;
         }
         
         let certHTML = `<div class="certificate-container" id="certificateContainer">
@@ -777,8 +728,8 @@
                 .certificate{max-width:700px;width:100%;background:linear-gradient(145deg,#fffaf0,#fffbeb);border-radius:48px;padding:40px 30px;text-align:center;border:8px solid #fbbf24;}
                 .certificate h1{color:#b45309;}.student-name{font-size:2rem;font-weight:bold;color:#1e3a8a;background:#fef3c7;display:inline-block;padding:10px 36px;border-radius:60px;border:2px dashed #f59e0b;}
                 .score{font-size:2rem;color:#ea580c;}.level{background:#fbbf24;display:inline-block;padding:8px 32px;border-radius:60px;}
-                .fraction-v{display:inline-flex;flex-direction:column;align-items:center;}.fraction-v .num{border-bottom:1px solid #f59e0b;padding:0 3px;}.certificate-buttons{display:none;}.close-certificate{display:none;}
-                .teacher-log-fraction{display:inline-flex;flex-direction:column;align-items:center;}.teacher-log-fraction .num{border-bottom:1px solid #92400e;padding:0 3px;}
+                .certificate-buttons{display:none;}.close-certificate{display:none;}
+                .table-fraction{display:inline-flex;flex-direction:column;align-items:center;}.table-fraction .num{border-bottom:1px solid #92400e;padding:0 3px;}.table-mixed{display:inline-flex;align-items:center;gap:2px;}
             </style></head><body>${printContent.outerHTML}</body></html>`); 
             printWindow.document.close(); 
             printWindow.print(); 
@@ -786,7 +737,7 @@
         });
     }
 
-    // 测验模块 (使用竖式分数显示报告)
+    // 测验模块
     let quizQuestions=[], quizUserAnswers=[], quizCurrentIdx=0, quizStarted=false, quizHistory=JSON.parse(localStorage.getItem("mixedQuizHistory")) || [];
     function generateQuiz(){ let qs=[]; for(let i=0;i<5;i++){ let whole=Math.floor(Math.random()*3)+1; let den=goodDenominators[Math.floor(Math.random()*goodDenominators.length)]; let num=Math.floor(Math.random()*(den-1))+1; if(num<1) num=1; qs.push({whole, num, den, correct:mixedToPercent(whole,num,den)}); } return qs; }
     function renderQuizQuestion(){ let q=quizQuestions[quizCurrentIdx]; document.getElementById('quizQuestionText').innerHTML = buildMixedHTML(q.whole, q.num, q.den, true); document.getElementById('quizAnswer').value=''; document.getElementById('quizFeedback').innerHTML=''; let qPrefix = currentLang==='en'?'Question':(currentLang==='zh'?'第':'Soalan'); document.getElementById('quizQPrefix').innerHTML = `${qPrefix} ${quizCurrentIdx+1} / 5`; }
@@ -797,8 +748,8 @@
             let userVal=quizUserAnswers[i]; 
             let isCorrect=(Math.abs(userVal - q.correct)<0.01); 
             if(isCorrect) total+=10; 
-            let fractionDisplay = buildSmallFractionHTML(q.num, q.den);
-            let mixedDisplay = `<span class="mixed-v"><span class="whole">${q.whole}</span>${fractionDisplay}</span>`;
+            // 使用表格专用竖式带分数
+            let mixedDisplay = buildTableMixedHTML(q.whole, q.num, q.den);
             details.push({mixed: mixedDisplay, mixedRaw: `${q.whole} ${q.num}/${q.den}`, userAnswer:userVal, correctAnswer:q.correct, isCorrect}); 
         }
         let record = { timestamp: new Date().toLocaleString(), score:total, details:details }; 
@@ -817,7 +768,7 @@
         let reportTitle = currentLang==='en'?'Quiz Report':(currentLang==='zh'?'测验报告':'Laporan Kuiz'); 
         let html=`<div class="quiz-report"><h3>📋 ${reportTitle} (${record.timestamp})</h3><table class="quiz-table"><thead><tr><th>${t('reportMixed')}</th><th>Your Answer</th><th>Correct</th><th>Result</th></tr></thead><tbody>`;
         record.details.forEach(d=>{ 
-            html+=`<tr class="${d.isCorrect?'correct-ans':'wrong-ans'}"><td>${d.mixed}</td><td>${d.userAnswer}%</td》《td>${d.correctAnswer}%</td》《td>${d.isCorrect?'✅':'❌'}</td></tr>`; 
+            html+=`<tr class="${d.isCorrect?'correct-ans':'wrong-ans'}"><td>${d.mixed}</td》《td>${d.userAnswer}%</td》《td>${d.correctAnswer}%</td》《td>${d.isCorrect?'✅':'❌'}</td></tr>`; 
         });
         html+=`</tbody></table><p><strong>Total: ${record.score}/50</strong></p><button id="exportQuizBtn">📎 ${t('exportCSV')}</button></div>`;
         document.getElementById('quizReportArea').innerHTML = html; 
@@ -833,27 +784,36 @@
     document.getElementById('startQuizBtn').addEventListener('click',startQuiz);
     document.getElementById('submitQuizBtn').addEventListener('click',submitQuizAnswer);
 
-    // 教师报告 (使用竖式分数 + 密码保护)
+    // ========== 教师报告 - 使用竖式分数显示 Details ==========
     function updateTeacherLogDisplay(){ 
         let container = document.getElementById('teacherLogArea'); 
         let noHistoryMsg = currentLang==='en'?'✨ No quiz history yet':(currentLang==='zh'?'✨ 暂无测验记录':'✨ Tiada rekod kuiz lagi'); 
         if(!quizHistory.length){ container.innerHTML=`<p>${noHistoryMsg}</p>`; return; } 
         let html = `<div><table class="quiz-table"><thead><tr><th>Time</th><th>Score</th><th>Details</th></tr></thead><tbody>`;
-        quizHistory.forEach(rec=>{ 
-            let detailShort = rec.details.map(d=>`${d.mixed} ${d.isCorrect?'✓':'✗'}`).join(', '); 
-            html+=`<tr><td>${rec.timestamp}</td><td>${rec.score}/50</td><td>${detailShort}</td></tr>`; 
-        });
+        for(let rec of quizHistory){ 
+            // 构建竖式分数详情字符串
+            let detailParts = [];
+            for(let d of rec.details){
+                // 使用存储的竖式HTML
+                detailParts.push(`${d.mixed} ${d.isCorrect ? '✓' : '✗'}`);
+            }
+            let detailShort = detailParts.join(', ');
+            html+=`<tr><td>${rec.timestamp}</td><td>${rec.score}/50</td><td>${detailShort}</td></tr>`;
+        }
         html+=`</tbody></table><button id="exportAllHistBtn">📎 ${t('exportCSV')} (ALL)</button></div>`;
         container.innerHTML = html; 
         document.getElementById('exportAllHistBtn')?.addEventListener('click',()=>{ 
             let csv=[["Time","Score","Details"]]; 
-            quizHistory.forEach(rec=>{ let detail=rec.details.map(d=>`${d.mixedRaw}:${d.isCorrect?'correct':'wrong'}`).join(";"); csv.push([rec.timestamp, rec.score, detail]); }); 
+            quizHistory.forEach(rec=>{ 
+                let detail = rec.details.map(d=>`${d.mixedRaw}:${d.isCorrect?'correct':'wrong'}`).join(";"); 
+                csv.push([rec.timestamp, rec.score, detail]); 
+            }); 
             let blob=new Blob(["\uFEFF"+csv.map(r=>r.join(",")).join("\n")],{type:"text/csv"}); 
             let a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`mixed_history.csv`; a.click(); URL.revokeObjectURL(a.href); 
         }); 
     }
     
-    // 清除历史按钮 - 添加密码保护
+    // 清除历史按钮 - 密码保护
     document.getElementById('clearHistoryBtn').addEventListener('click', () => {
         verifyTeacherPassword((success) => {
             if (success) {
@@ -864,8 +824,6 @@
                     updateTeacherLogDisplay();
                     showFloatingMsg(currentLang === 'en' ? '✅ History cleared!' : (currentLang === 'zh' ? '✅ 历史记录已清除！' : '✅ Sejarah dipadam!'), true);
                 }
-            } else {
-                // 密码错误时已经有提示，不需要额外操作
             }
         });
     });
