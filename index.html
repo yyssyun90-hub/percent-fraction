@@ -35,7 +35,7 @@
         .lang-btn { background: none; border: none; color: white; font-weight: bold; cursor: pointer; padding: 4px 12px; border-radius: 30px; font-size: 0.9rem;}
         .lang-btn.active { background: white; color: #ff9f4a; }
         .tabs { display: flex; gap: 8px; padding: 12px 20px 0 20px; background: #fef3d6; flex-wrap: wrap;}
-        .tab-btn { background: #e9dbbd; border: none; padding: 8px 18px; font-weight: bold; border-radius: 40px 40px 0 0; cursor: pointer; color: #5c3e1f; font-size: 0.9rem;}
+        .tab-btn { background: #e9dbbd; border: none; padding: 8px 18px; font-weight: bold; border-radius: 40px 40px 0 0; cursor: pointer; color: #5c3e1f; font-size: 0.9rem; transition: 0.2s;}
         .tab-btn.active { background: #ff9f4a; color: white; }
         .tab-content { display: none; padding: 24px; background: #fffef7; border-radius: 0 0 48px 48px; }
         .tab-content.active { display: block; }
@@ -114,7 +114,7 @@
             .challenge-link-card h2 { font-size: 1.2rem; }
             .challenge-link-btn { padding: 10px 20px; font-size: 0.9rem; }
             .game-header h1 { font-size: 1.1rem; }
-            .tab-btn { padding: 6px 12px; font-size: 0.8rem; }
+            .tab-btn { padding: 6px 12px; font-size: 0.75rem; }
         }
     </style>
 </head>
@@ -134,11 +134,11 @@
             <button class="lang-btn active" data-lang="ms">BM</button>
         </div></div>
         <div class="tabs">
-            <button class="tab-btn active" data-tab="learn">📖 LEARN</button>
-            <button class="tab-btn" data-tab="practice">✏️ PRACTICE</button>
-            <button class="tab-btn" data-tab="challenge">⚡ CHALLENGE</button>
-            <button class="tab-btn" data-tab="quiz">📝 QUIZ</button>
-            <button class="tab-btn" data-tab="teacher">📊 REPORT</button>
+            <button class="tab-btn active" data-tab="learn" id="tabLearnBtn">📖 LEARN</button>
+            <button class="tab-btn" data-tab="practice" id="tabPracticeBtn">✏️ PRACTICE</button>
+            <button class="tab-btn" data-tab="challenge" id="tabChallengeBtn">⚡ CHALLENGE</button>
+            <button class="tab-btn" data-tab="quiz" id="tabQuizBtn">📝 QUIZ</button>
+            <button class="tab-btn" data-tab="teacher" id="tabTeacherBtn">📊 REPORT</button>
         </div>
 
         <!-- 学习模式 -->
@@ -213,9 +213,12 @@
 </div>
 
 <script>
-    // ----------------------------- 多语言字典 (EN, ZH, MS) ---------------------------------
+    // ----------------------------- 多语言字典 (EN, ZH, MS) - 包含标签页文字 ---------------------------------
     const langData = {
         en: { 
+            // 标签页按钮
+            tabLearn:"📖 LEARN", tabPractice:"✏️ PRACTICE", tabChallenge:"⚡ CHALLENGE", tabQuiz:"📝 QUIZ", tabTeacher:"📊 REPORT",
+            // 其他文字
             scoreLabel:"SCORE", levelLabel:"LEVEL", mainTitle:"Mixed Number → Percent Lab",
             learnSubtitle:"📌 Click a mixed number or type your own:", circleTitle:"🥧 Circle Chart (each whole = 100%)",
             gridTitle:"📊 100‑Square Grid (1% each)", 
@@ -226,9 +229,10 @@
             correctMsg:"Correct!", wrongMsg:"Wrong", hintPrefix:"Hint", nextBtn:"NEXT QUESTION",
             checkBtn:"CHECK", submitBtn:"SUBMIT", convertBtn:"CONVERT", exportCSV:"📎 Export CSV",
             recordScore:"✨ Record My Score ✨", startQuiz:"📋 START QUIZ", clearHistory:"🗑️ CLEAR HISTORY",
-            step1:"Step 1", step2:"Step 2", whole:"whole"
+            step1:"Step 1", step2:"Step 2", whole:"whole", practicePlaceholder:"e.g., 150", quizPlaceholder:"percent"
         },
         zh: { 
+            tabLearn:"📖 竖式学习", tabPractice:"✏️ 练一练", tabChallenge:"⚡ 挑战赛", tabQuiz:"📝 随堂测验", tabTeacher:"📊 老师报告",
             scoreLabel:"⭐总分", levelLabel:"🏆等级", mainTitle:"🏠 带分数 → 百分比实验室",
             learnSubtitle:"📌 点击下方带分数，或自己输入：", circleTitle:"🥧 圆饼图 (每个整数=100%)",
             gridTitle:"📊 百格方阵 (1格=1%)",
@@ -239,9 +243,10 @@
             correctMsg:"✓ 正确！", wrongMsg:"✗ 错误", hintPrefix:"💡 提示", nextBtn:"🎲 下一题",
             checkBtn:"✅ 批改", submitBtn:"✅ 提交", convertBtn:"➡️ 转换", exportCSV:"📎 导出报告 (CSV)",
             recordScore:"✨ 记录我的分数 ✨", startQuiz:"📋 开始测验", clearHistory:"🗑️ 清除历史",
-            step1:"步骤 1", step2:"步骤 2", whole:"个整数"
+            step1:"步骤 1", step2:"步骤 2", whole:"个整数", practicePlaceholder:"如 150", quizPlaceholder:"百分比"
         },
         ms: { 
+            tabLearn:"📖 BELAJAR", tabPractice:"✏️ LATIHAN", tabChallenge:"⚡ CABARAN", tabQuiz:"📝 KUIZ", tabTeacher:"📊 LAPORAN",
             scoreLabel:"⭐ MARKAH", levelLabel:"🏆 TAHAP", mainTitle:"🏠 Nombor Bercampur → Peratus",
             learnSubtitle:"📌 Klik nombor bercampur atau taip sendiri:", circleTitle:"🥧 Carta Bulatan (setiap bulat = 100%)",
             gridTitle:"📊 Grid 100 Petak (1% setiap petak)",
@@ -252,13 +257,21 @@
             correctMsg:"✓ Betul!", wrongMsg:"✗ Salah", hintPrefix:"💡 Petunjuk", nextBtn:"🎲 SOALAN SETERUSNYA",
             checkBtn:"✅ SEMAK", submitBtn:"✅ HANTAR", convertBtn:"➡️ TUKAR", exportCSV:"📎 Eksport CSV",
             recordScore:"✨ Rekod Markah Saya ✨", startQuiz:"📋 MULAKAN KUIZ", clearHistory:"🗑️ PADAM SEJARAH",
-            step1:"Langkah 1", step2:"Langkah 2", whole:"bulat"
+            step1:"Langkah 1", step2:"Langkah 2", whole:"bulat", practicePlaceholder:"cth., 150", quizPlaceholder:"peratus"
         }
     };
     let currentLang = 'ms';  // 默认马来文
     function t(key){ return langData[currentLang][key] || langData['en'][key]; }
     
     function updateUIText(){
+        // 更新标签页按钮 (最重要!)
+        document.getElementById('tabLearnBtn').innerHTML = t('tabLearn');
+        document.getElementById('tabPracticeBtn').innerHTML = t('tabPractice');
+        document.getElementById('tabChallengeBtn').innerHTML = t('tabChallenge');
+        document.getElementById('tabQuizBtn').innerHTML = t('tabQuiz');
+        document.getElementById('tabTeacherBtn').innerHTML = t('tabTeacher');
+        
+        // 更新其他界面元素
         document.getElementById('scoreLabel').innerText = t('scoreLabel');
         document.getElementById('levelLabel').innerText = t('levelLabel');
         document.getElementById('mainTitle').innerText = t('mainTitle');
@@ -278,11 +291,18 @@
         document.getElementById('startQuizBtn').innerText = t('startQuiz');
         document.getElementById('clearHistoryBtn').innerText = t('clearHistory');
         document.getElementById('recordChallengeScoreBtn').innerText = t('recordScore');
+        
+        // 更新输入框占位符
+        document.getElementById('practiceAnswer').placeholder = t('practicePlaceholder');
+        document.getElementById('quizAnswer').placeholder = t('quizPlaceholder');
+        
+        // 更新当前活动页面的内容
         if(document.getElementById('learnTab').classList.contains('active')) updateLearn();
         if(document.getElementById('practiceTab').classList.contains('active')) updatePracticeUI();
         updateTeacherLogDisplay();
     }
     
+    // 语言切换事件
     document.querySelectorAll('.lang-btn').forEach(btn=>{ 
         btn.addEventListener('click',()=>{
             document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));
@@ -392,7 +412,7 @@
         if(d<1)d=1; setMixed(w,n,d); 
     });
 
-    // 练习模式
+    // 练习模式 (只使用有限小数分母)
     const goodDenominators = [2,4,5,8,10];
     function randomMixed(){ 
         let whole = Math.floor(Math.random()*3)+1; 
