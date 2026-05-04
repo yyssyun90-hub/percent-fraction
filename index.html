@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Mixed Number to Percentage | 带分数转百分比 · 五年级专修</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1f3b2c, #0e2a1a);
+            font-family: 'Segoe UI', 'Poppins', 'Comic Neue', 'Chalkboard SE', cursive;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .stars { position: fixed; top:0; left:0; width:100%; height:100%; pointer-events: none; overflow: hidden; z-index:0;}
+        .star { position: absolute; background: #fff2bf; border-radius: 50%; animation: blink 2s infinite alternate; box-shadow: 0 0 5px gold; }
+        @keyframes blink { 0% { opacity: 0.2; transform: scale(0.8);} 100% { opacity: 1; transform: scale(1);} }
+        .game-container { max-width: 1300px; margin: 0 auto; position: relative; z-index: 10; }
+        .pet-bar {
+            background: rgba(46, 92, 42, 0.95); backdrop-filter: blur(8px);
+            border-radius: 60px; padding: 8px 24px; margin-bottom: 20px;
+            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;
+            border: 1px solid #ffd966;
+        }
+        .pet-area { display: flex; align-items: center; gap: 15px; }
+        .pet-avatar { font-size: 3rem; cursor: pointer; filter: drop-shadow(2px 4px 6px black); transition: 0.2s; }
+        .pet-avatar:hover { transform: scale(1.05);}
+        .pet-talk { background: #fffae6; border-radius: 30px; padding: 8px 18px; color: #2c5a2a; font-weight: bold; border-left: 8px solid #ffb347; font-size: 0.9rem; max-width: 280px; }
+        .score-panel { display: flex; gap: 20px; background: #2e5c2a; padding: 5px 20px; border-radius: 50px; color: #ffefb9; }
+        .score-value { font-size: 1.5rem; font-weight: bold; }
+        .game-card { background: rgba(255, 250, 225, 0.96); backdrop-filter: blur(4px); border-radius: 64px; overflow: hidden; border: 2px solid #ffcd7e; box-shadow: 0 20px 40px rgba(0,0,0,0.3);}
+        .game-header { background: #ff9f4a; padding: 16px 28px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;}
+        .game-header h1 { font-size: 1.5rem; color: #2d2b1f; margin:0; display: flex; gap: 8px; align-items: center;}
+        .lang-bar { display: flex; gap: 8px; background: rgba(0,0,0,0.2); padding: 4px 12px; border-radius: 40px;}
+        .lang-btn { background: none; border: none; color: white; font-weight: bold; cursor: pointer; padding: 4px 12px; border-radius: 30px; font-size: 0.9rem;}
+        .lang-btn.active { background: white; color: #ff9f4a; }
+        .tabs { display: flex; gap: 8px; padding: 12px 20px 0 20px; background: #fef3d6; flex-wrap: wrap;}
+        .tab-btn { background: #e9dbbd; border: none; padding: 8px 18px; font-weight: bold; border-radius: 40px 40px 0 0; cursor: pointer; color: #5c3e1f; font-size: 0.9rem;}
+        .tab-btn.active { background: #ff9f4a; color: white; }
+        .tab-content { display: none; padding: 24px; background: #fffef7; border-radius: 0 0 48px 48px; }
+        .tab-content.active { display: block; }
+        
+        /* 分数竖式样式 */
+        .mixed-v { display: inline-flex; align-items: center; gap: 4px; font-weight: bold; }
+        .fraction-v { display: inline-flex; flex-direction: column; align-items: center; vertical-align: middle; }
+        .fraction-v .num { border-bottom: 2px solid #1e3c1a; padding: 0 6px; font-size: 1rem; }
+        .fraction-v .den { padding: 0 6px; font-size: 1rem; }
+        .btn-fraction { background: #f1e2c9; border: none; padding: 8px 16px; border-radius: 48px; font-weight: bold; cursor: pointer; transition: 0.1s; margin: 5px; display: inline-flex; align-items: center; gap: 4px; font-size: 1rem; }
+        .btn-fraction.active { background: #ff9f4a; color: white; }
+        .big-fraction .fraction-v .num, .big-fraction .fraction-v .den { font-size: 1.8rem; }
+        .big-fraction .fraction-v .num { border-bottom-width: 3px; }
+        
+        .visual-card { background: #fef3e0; border-radius: 32px; padding: 20px; text-align: center; margin-bottom: 24px; }
+        .square-grid { display: grid; grid-template-columns: repeat(10, 28px); gap: 2px; justify-content: center; background: #e9d6b0; padding: 12px; border-radius: 24px; }
+        .square-cell { width: 28px; height: 28px; background: #fffaec; border-radius: 6px; }
+        .square-cell.filled { background: #ff9f4a; box-shadow: 0 0 3px orange; }
+        .result-percent { font-size: 2.5rem; font-weight: bold; color: #c16100; background: #fff0cf; display: inline-block; padding: 8px 28px; border-radius: 80px; margin: 10px 0; }
+        button { background: #ff9f4a; border: none; padding: 8px 20px; border-radius: 40px; font-weight: bold; cursor: pointer; transition: 0.1s; margin: 4px; font-size: 0.9rem;}
+        .practice-input { display: flex; gap: 12px; justify-content: center; margin: 20px 0; flex-wrap: wrap; }
+        .practice-input input { width: 140px; padding: 10px; border-radius: 40px; border: 2px solid #ffb347; text-align: center; font-size: 1rem; }
+        .feedback-popup { position: fixed; top: 40%; left: 50%; transform: translate(-50%, -50%); background: #2b2b1a; color: #ffeaaf; padding: 20px 40px; border-radius: 60px; font-size: 1.3rem; z-index: 1000; animation: fadeOut 1s forwards; pointer-events: none; white-space: nowrap; }
+        @keyframes fadeOut { 0% { opacity: 1; transform: translate(-50%, -50%) scale(0.8);} 80%{ opacity: 1;} 100%{ opacity: 0; visibility: hidden;}}
+        .quiz-table { width: 100%; border-collapse: collapse; background: #fff5e6; border-radius: 24px; overflow: hidden; margin-top: 16px; font-size: 0.85rem;}
+        .quiz-table th, .quiz-table td { border: 1px solid #d9b48b; padding: 8px; text-align: center; }
+        .correct-ans { background: #b9f6ca; }
+        .wrong-ans { background: #ffcdb0; }
+        
+        /* 挑战模式链接卡片 */
+        .challenge-link-card {
+            background: linear-gradient(135deg, #ff9f4a, #ff7e2e);
+            border-radius: 48px;
+            padding: 30px 25px;
+            text-align: center;
+            margin: 20px 0;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        .challenge-link-card h2 {
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+        }
+        .challenge-link-card p {
+            color: #fff5e6;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+        .challenge-link-btn {
+            display: inline-block;
+            background: white;
+            color: #ff7e2e;
+            padding: 12px 28px;
+            border-radius: 60px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-decoration: none;
+            transition: 0.2s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .challenge-link-btn:hover {
+            transform: scale(1.05);
+            background: #fffae6;
+        }
+        .challenge-note {
+            text-align: center;
+            margin-top: 14px;
+            color: #fff0cf;
+            font-size: 0.8rem;
+        }
+        
+        @media (max-width: 700px) {
+            .square-grid { grid-template-columns: repeat(10, 22px); }
+            .square-cell { width: 22px; height: 22px; }
+            .result-percent { font-size: 1.8rem; }
+            .challenge-link-card h2 { font-size: 1.2rem; }
+            .challenge-link-btn { padding: 10px 20px; font-size: 0.9rem; }
+            .game-header h1 { font-size: 1.1rem; }
+            .tab-btn { padding: 6px 12px; font-size: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+<div class="game-container">
+    <div class="pet-bar">
+        <div class="pet-area"><div class="pet-avatar" id="petAvatar">🦊</div><div class="pet-talk" id="petTalk">✨ 1 whole = 100% ! Let's learn mixed numbers ✨</div></div>
+        <div class="score-panel"><div class="score-item"><div class="score-value" id="totalScore">0</div><div class="score-label" id="scoreLabel">SCORE</div></div>
+        <div class="score-item"><div class="score-value" id="levelDisplay">🌱 Seed</div><div class="score-label" id="levelLabel">LEVEL</div></div></div>
+    </div>
+    <div class="game-card">
+        <div class="game-header"><h1>🏠 <span id="mainTitle">Mixed Number → Percent Lab</span></h1>
+        <div class="lang-bar">
+            <button class="lang-btn" data-lang="en">EN</button>
+            <button class="lang-btn" data-lang="zh">中文</button>
+            <button class="lang-btn active" data-lang="ms">BM</button>
+        </div></div>
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="learn">📖 LEARN</button>
+            <button class="tab-btn" data-tab="practice">✏️ PRACTICE</button>
+            <button class="tab-btn" data-tab="challenge">⚡ CHALLENGE</button>
+            <button class="tab-btn" data-tab="quiz">📝 QUIZ</button>
+            <button class="tab-btn" data-tab="teacher">📊 REPORT</button>
+        </div>
+
+        <!-- 学习模式 -->
+        <div id="learnTab" class="tab-content active">
+            <div style="background:#f7f0df; border-radius: 48px; padding: 20px; text-align:center;">
+                <div style="font-weight:bold; margin-bottom:12px;" id="learnSubtitle">📌 Click a mixed number or type your own:</div>
+                <div id="mixedButtons" style="display:flex; flex-wrap:wrap; justify-content:center; gap:12px; margin-bottom:20px;"></div>
+                <div style="display:flex; justify-content:center; gap:12px; flex-wrap:wrap; align-items:center;">
+                    <input type="number" id="customWhole" value="1" style="width:80px; padding:8px; border-radius:28px; border:2px solid #cca86b; text-align:center;"> <span style="font-size:1.8rem;"> </span>
+                    <div style="display:inline-flex; flex-direction:column; align-items:center;"><input type="number" id="customNum" value="1" style="width:70px; padding:6px; text-align:center;"><span style="height:2px; width:50px; background:#8b6946; margin:2px;"></span><input type="number" id="customDen" value="2" style="width:70px; padding:6px; text-align:center;"></div>
+                    <button id="customConvertBtn">➡️ CONVERT</button>
+                </div>
+            </div>
+            <div class="visual-card"><div class="visual-title" id="circleTitle">🥧 Circle Chart (each whole = 100%)</div><div id="circlesContainer"></div></div>
+            <div class="visual-card"><div class="visual-title" id="gridTitle">📊 100‑Square Grid (1% each)</div><div id="squareGrid"></div></div>
+            <div style="background:#f5ebd4; border-radius: 32px; padding: 20px; text-align:center;"><div class="result-percent" id="resultPercent">—</div><div id="stepExplanation" style="background:#fff3e0; border-radius: 28px; padding: 14px; font-size:0.9rem;"></div></div>
+        </div>
+
+        <!-- 练习模式 -->
+        <div id="practiceTab" class="tab-content">
+            <div style="text-align:center;">
+                <div class="question-text" id="practiceQuestion" style="font-size:2rem; margin:20px;"></div>
+                <div class="practice-input"><input type="text" id="practiceAnswer" placeholder="e.g., 150"><button id="checkPracticeBtn">✅ CHECK</button></div>
+                <div id="practiceFeedback"></div><div id="practiceHint"></div>
+                <button id="nextPracticeBtn">🎲 NEXT QUESTION</button>
+            </div>
+        </div>
+
+        <!-- 挑战模式 - 链接跳转版 -->
+        <div id="challengeTab" class="tab-content">
+            <div class="challenge-link-card">
+                <h2 id="challengeTitle">⚡ PERATUS CHALLENGE ⚡</h2>
+                <p id="challengeDesc">Click the button below to start the ZEP Quiz challenge!</p>
+                <a href="https://quiz.zep.us/en/play/Jdj3X6" target="_blank" class="challenge-link-btn" id="challengeLinkBtn">
+                    🚀 GO TO CHALLENGE 🚀
+                </a>
+                <p class="challenge-note" id="challengeNote">💡 Complete the quiz and earn points! Your score will be recorded automatically.</p>
+            </div>
+            
+            <!-- 挑战得分记录区 -->
+            <div style="background:#fef3e0; border-radius: 32px; padding: 20px; margin-top: 20px; text-align:center;">
+                <div style="font-weight:bold; margin-bottom:12px;" id="recordTitle">📊 Challenge Score Record</div>
+                <div><span id="latestScoreLabel">🏆 Latest Challenge Score:</span> <span id="latestChallengeScore" style="font-size:1.5rem; font-weight:bold; color:#ff7e2e;">—</span></div>
+                <button id="recordChallengeScoreBtn" style="margin-top:12px; background:#ff9f4a;">✨ Record My Score ✨</button>
+                <div id="challengeScoreFeedback" style="margin-top:8px; font-size:0.85rem;"></div>
+            </div>
+        </div>
+
+        <!-- 测验模块 -->
+        <div id="quizTab" class="tab-content">
+            <div id="quizSetupPanel" style="background:#f7f0df; border-radius: 40px; padding: 20px; text-align:center;">
+                <p id="quizDesc">📋 5 questions, 10 points each. Convert mixed numbers to percent.</p>
+                <button id="startQuizBtn">📋 START QUIZ</button>
+            </div>
+            <div id="quizPanel" style="display:none;">
+                <div id="quizQuestionArea" style="background:#f5e7cf; border-radius: 48px; padding: 24px; text-align:center;">
+                    <div id="quizQPrefix">Question</div>
+                    <div class="question-text" id="quizQuestionText" style="font-size:2rem; margin:20px;"></div>
+                    <div class="practice-input"><input type="text" id="quizAnswer" placeholder="percent"><button id="submitQuizBtn">✅ SUBMIT</button></div>
+                    <div id="quizFeedback"></div>
+                </div>
+            </div>
+            <div id="quizReportArea" style="display:none; margin-top:24px;"></div>
+        </div>
+
+        <!-- 教师报告 -->
+        <div id="teacherTab" class="tab-content">
+            <div id="teacherLogArea" style="background:#fef0df; border-radius: 32px; padding: 20px; overflow-x:auto;"><p>✨ No quiz history yet.</p></div>
+            <button id="clearHistoryBtn">🗑️ CLEAR HISTORY</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ----------------------------- 多语言字典 (EN, ZH, MS) ---------------------------------
+    const langData = {
+        en: { 
+            scoreLabel:"SCORE", levelLabel:"LEVEL", mainTitle:"Mixed Number → Percent Lab",
+            learnSubtitle:"📌 Click a mixed number or type your own:", circleTitle:"🥧 Circle Chart (each whole = 100%)",
+            gridTitle:"📊 100‑Square Grid (1% each)", 
+            challengeTitle:"⚡ PERATUS CHALLENGE ⚡", challengeDesc:"Click the button below to start the ZEP Quiz challenge!",
+            challengeNote:"💡 Complete the quiz and earn points! Your score will be recorded automatically.",
+            recordTitle:"📊 Challenge Score Record", latestScoreLabel:"🏆 Latest Challenge Score:",
+            quizDesc:"📋 5 questions, 10 points each. Convert mixed numbers to percent.",
+            correctMsg:"Correct!", wrongMsg:"Wrong", hintPrefix:"Hint", nextBtn:"NEXT QUESTION",
+            checkBtn:"CHECK", submitBtn:"SUBMIT", convertBtn:"CONVERT", exportCSV:"📎 Export CSV",
+            recordScore:"✨ Record My Score ✨", startQuiz:"📋 START QUIZ", clearHistory:"🗑️ CLEAR HISTORY",
+            step1:"Step 1", step2:"Step 2", whole:"whole"
+        },
+        zh: { 
+            scoreLabel:"⭐总分", levelLabel:"🏆等级", mainTitle:"🏠 带分数 → 百分比实验室",
+            learnSubtitle:"📌 点击下方带分数，或自己输入：", circleTitle:"🥧 圆饼图 (每个整数=100%)",
+            gridTitle:"📊 百格方阵 (1格=1%)",
+            challengeTitle:"⚡ 百分比挑战 ⚡", challengeDesc:"点击下方按钮开始 ZEP Quiz 挑战！",
+            challengeNote:"💡 完成测验后，点击「记录我的分数」按钮，得分会自动计入总分。",
+            recordTitle:"📊 挑战得分记录", latestScoreLabel:"🏆 最新挑战得分:",
+            quizDesc:"📋 共5题，每题10分。将带分数转为百分比。",
+            correctMsg:"✓ 正确！", wrongMsg:"✗ 错误", hintPrefix:"💡 提示", nextBtn:"🎲 下一题",
+            checkBtn:"✅ 批改", submitBtn:"✅ 提交", convertBtn:"➡️ 转换", exportCSV:"📎 导出报告 (CSV)",
+            recordScore:"✨ 记录我的分数 ✨", startQuiz:"📋 开始测验", clearHistory:"🗑️ 清除历史",
+            step1:"步骤 1", step2:"步骤 2", whole:"个整数"
+        },
+        ms: { 
+            scoreLabel:"⭐ MARKAH", levelLabel:"🏆 TAHAP", mainTitle:"🏠 Nombor Bercampur → Peratus",
+            learnSubtitle:"📌 Klik nombor bercampur atau taip sendiri:", circleTitle:"🥧 Carta Bulatan (setiap bulat = 100%)",
+            gridTitle:"📊 Grid 100 Petak (1% setiap petak)",
+            challengeTitle:"⚡ CABARAN PERATUS ⚡", challengeDesc:"Klik butang di bawah untuk memulakan cabaran ZEP Quiz!",
+            challengeNote:"💡 Selesaikan kuiz dan catatkan markah anda! Markah akan direkodkan secara automatik.",
+            recordTitle:"📊 Rekod Markah Cabaran", latestScoreLabel:"🏆 Markah Cabaran Terkini:",
+            quizDesc:"📋 5 soalan, 10 markah setiap satu. Tukar nombor bercampur kepada peratus.",
+            correctMsg:"✓ Betul!", wrongMsg:"✗ Salah", hintPrefix:"💡 Petunjuk", nextBtn:"🎲 SOALAN SETERUSNYA",
+            checkBtn:"✅ SEMAK", submitBtn:"✅ HANTAR", convertBtn:"➡️ TUKAR", exportCSV:"📎 Eksport CSV",
+            recordScore:"✨ Rekod Markah Saya ✨", startQuiz:"📋 MULAKAN KUIZ", clearHistory:"🗑️ PADAM SEJARAH",
+            step1:"Langkah 1", step2:"Langkah 2", whole:"bulat"
+        }
+    };
+    let currentLang = 'ms';  // 默认马来文
+    function t(key){ return langData[currentLang][key] || langData['en'][key]; }
+    
+    function updateUIText(){
+        document.getElementById('scoreLabel').innerText = t('scoreLabel');
+        document.getElementById('levelLabel').innerText = t('levelLabel');
+        document.getElementById('mainTitle').innerText = t('mainTitle');
+        document.getElementById('learnSubtitle').innerText = t('learnSubtitle');
+        document.getElementById('circleTitle').innerText = t('circleTitle');
+        document.getElementById('gridTitle').innerText = t('gridTitle');
+        document.getElementById('challengeTitle').innerText = t('challengeTitle');
+        document.getElementById('challengeDesc').innerText = t('challengeDesc');
+        document.getElementById('challengeNote').innerText = t('challengeNote');
+        document.getElementById('recordTitle').innerText = t('recordTitle');
+        document.getElementById('latestScoreLabel').innerText = t('latestScoreLabel');
+        document.getElementById('quizDesc').innerText = t('quizDesc');
+        document.getElementById('customConvertBtn').innerText = t('convertBtn');
+        document.getElementById('checkPracticeBtn').innerText = t('checkBtn');
+        document.getElementById('nextPracticeBtn').innerText = t('nextBtn');
+        document.getElementById('submitQuizBtn').innerText = t('submitBtn');
+        document.getElementById('startQuizBtn').innerText = t('startQuiz');
+        document.getElementById('clearHistoryBtn').innerText = t('clearHistory');
+        document.getElementById('recordChallengeScoreBtn').innerText = t('recordScore');
+        if(document.getElementById('learnTab').classList.contains('active')) updateLearn();
+        if(document.getElementById('practiceTab').classList.contains('active')) updatePracticeUI();
+        updateTeacherLogDisplay();
+    }
+    
+    document.querySelectorAll('.lang-btn').forEach(btn=>{ 
+        btn.addEventListener('click',()=>{
+            document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));
+            btn.classList.add('active');
+            currentLang = btn.dataset.lang;
+            updateUIText();
+            let petMsg = currentLang==='en' ? '✨ 1 whole = 100% ! Let\'s learn mixed numbers ✨' : (currentLang==='zh' ? '✨ 1个整数 = 100% ! 一起学带分数 ✨' : '✨ 1 bulat = 100% ! Jom belajar nombor bercampur ✨');
+            document.getElementById('petTalk').innerHTML = petMsg;
+        });
+    });
+
+    // ----------------------------- 带分数核心逻辑 -----------------------------
+    let totalScore = 0;
+    let levelNames = {
+        en:["🌱 Seed","🌟 Sprout","🥈 Flower","🥇 Tree","🏆 Forest","👑 Master"], 
+        zh:["🌱种子","🌟发芽","🥈小花","🥇大树","🏆森林","👑王者"],
+        ms:["🌱 Benih","🌟 Tunas","🥈 Bunga","🥇 Pokok","🏆 Hutan","👑 Mahir"]
+    };
+    function updateScoreUI(){ 
+        let lv = Math.min(Math.floor(totalScore/50), 5); 
+        document.getElementById('levelDisplay').innerHTML = levelNames[currentLang][lv]; 
+        document.getElementById('totalScore').innerText=totalScore; 
+    }
+    function addPoints(p){ totalScore+=p; updateScoreUI(); showFloatingMsg(`+${p} pts`, true); }
+    function showFloatingMsg(msg, good){ 
+        let d=document.createElement('div'); d.className='feedback-popup'; d.innerText=msg; 
+        d.style.background=good? '#2b6e2b':'#9a3e1a'; document.body.appendChild(d); 
+        setTimeout(()=>d.remove(),900);
+    }
+
+    // 构建竖式分数HTML
+    function buildFractionHTML(num, den, className="fraction-v"){ 
+        return `<span class="${className}"><span class="num">${num}</span><span class="den">${den}</span></span>`; 
+    }
+    function buildMixedHTML(whole, num, den, big=false){ 
+        let cls = big ? "mixed-v" : "mixed-v"; 
+        return `<span class="${cls}"><span class="whole">${whole}</span>${buildFractionHTML(num, den)}</span>`; 
+    }
+    
+    function mixedToPercent(whole, num, den){ 
+        let decimal = whole + (num/den); 
+        let percent = decimal * 100; 
+        return Math.round(percent * 100) / 100; 
+    }
+
+    // 学习模式
+    let currentWhole=1, currentNum=1, currentDen=2;
+    function updateLearn(){
+        let percent = mixedToPercent(currentWhole, currentNum, currentDen);
+        document.getElementById('resultPercent').innerHTML = percent+"%";
+        let stepMsg = (currentLang==='en') ? 
+            `📐 Step 1: ${currentWhole} whole = ${currentWhole*100}%<br>📐 Step 2: ${buildFractionHTML(currentNum,currentDen)} = ${((currentNum/currentDen)*100)}%<br>➕ Total = ${percent}%<br>🎯 ${buildMixedHTML(currentWhole,currentNum,currentDen)} = ${percent}%` :
+            (currentLang==='zh' ?
+            `📐 步骤 1：${currentWhole} 个整数 = ${currentWhole*100}%<br>📐 步骤 2：${buildFractionHTML(currentNum,currentDen)} = ${((currentNum/currentDen)*100)}%<br>➕ 相加得到 = ${percent}%<br>🎯 ${buildMixedHTML(currentWhole,currentNum,currentDen)} = ${percent}%` :
+            `📐 Langkah 1: ${currentWhole} bulat = ${currentWhole*100}%<br>📐 Langkah 2: ${buildFractionHTML(currentNum,currentDen)} = ${((currentNum/currentDen)*100)}%<br>➕ Jumlah = ${percent}%<br>🎯 ${buildMixedHTML(currentWhole,currentNum,currentDen)} = ${percent}%`);
+        document.getElementById('stepExplanation').innerHTML = stepMsg;
+
+        let circlesHtml = '';
+        for(let i=0;i<currentWhole;i++) circlesHtml += drawCircle(100, `100%`);
+        let fractionPercent = (currentNum/currentDen)*100;
+        circlesHtml += drawCircle(fractionPercent, `${Math.round(fractionPercent)}%`);
+        document.getElementById('circlesContainer').innerHTML = circlesHtml;
+
+        let totalPercent = percent;
+        let gridsHtml = '';
+        if(totalPercent <= 100) gridsHtml = drawSquareGrid(totalPercent);
+        else { let fullSets = Math.floor(totalPercent/100); let remainder = totalPercent % 100; for(let i=0;i<fullSets;i++) gridsHtml += drawSquareGrid(100); if(remainder>0) gridsHtml += drawSquareGrid(remainder); }
+        document.getElementById('squareGrid').innerHTML = gridsHtml;
+    }
+    
+    function drawCircle(percent, label){ 
+        let r=45, c=2*Math.PI*r, dash=(percent/100)*c, offset=c-dash; 
+        return `<div style="display:inline-block; margin:8px;"><svg width="110" height="110" viewBox="0 0 100 100"><circle cx="50" cy="50" r="${r}" fill="#ffe2b5" stroke="#cb8b42" stroke-width="5"/><circle cx="50" cy="50" r="${r}" fill="none" stroke="#ff8c42" stroke-width="6" stroke-dasharray="${c}" stroke-dashoffset="${offset}" style="transform:rotate(-90deg); transform-origin:50% 50%;"/><text x="50" y="56" text-anchor="middle" fill="#4a2a0a" font-weight="bold" font-size="14">${label}</text></svg></div>`; 
+    }
+    
+    function drawSquareGrid(percent){ 
+        let filled = Math.min(100, Math.round(percent)); 
+        let grid = '<div class="square-grid">'; 
+        for(let i=0;i<100;i++) grid+=`<div class="square-cell ${i<filled?'filled':''}"></div>`; 
+        grid+=`</div><div>${Math.round(percent)}% (${filled}/100)</div>`; 
+        return grid; 
+    }
+    
+    function setMixed(whole,num,den){ 
+        currentWhole=whole; currentNum=num; currentDen=den; updateLearn(); 
+        document.getElementById('customWhole').value=whole; 
+        document.getElementById('customNum').value=num; 
+        document.getElementById('customDen').value=den; 
+    }
+
+    // 预设带分数（有限小数分母）
+    const mixedPresets = [[1,1,2],[1,1,4],[2,3,4],[1,1,5],[2,2,5],[1,1,8],[2,7,8],[1,1,10],[3,3,10],[2,1,2],[3,1,4],[1,3,5],[1,3,8],[2,3,5]];
+    function buildMixedBtns(){ 
+        let html=''; 
+        mixedPresets.forEach(([w,n,d])=>{ 
+            html+=`<button class="btn-fraction" data-w="${w}" data-n="${n}" data-d="${d}">${buildMixedHTML(w,n,d)}</button>`; 
+        }); 
+        document.getElementById('mixedButtons').innerHTML=html; 
+        document.querySelectorAll('.btn-fraction').forEach(btn=>{ 
+            btn.addEventListener('click',()=>{ setMixed(parseInt(btn.dataset.w), parseInt(btn.dataset.n), parseInt(btn.dataset.d)); }); 
+        }); 
+    }
+    document.getElementById('customConvertBtn').addEventListener('click',()=>{ 
+        let w=parseInt(document.getElementById('customWhole').value)||1; 
+        let n=parseInt(document.getElementById('customNum').value)||1; 
+        let d=parseInt(document.getElementById('customDen').value)||1; 
+        if(d<1)d=1; setMixed(w,n,d); 
+    });
+
+    // 练习模式
+    const goodDenominators = [2,4,5,8,10];
+    function randomMixed(){ 
+        let whole = Math.floor(Math.random()*3)+1; 
+        let den = goodDenominators[Math.floor(Math.random()*goodDenominators.length)]; 
+        let num = Math.floor(Math.random()*(den-1))+1; 
+        if(num<1) num=1; if(num>=den) num=den-1; 
+        return {whole, num, den}; 
+    }
+    let practiceMixed = {whole:1, num:1, den:2};
+    function updatePracticeUI(){ 
+        practiceMixed = randomMixed(); 
+        document.getElementById('practiceQuestion').innerHTML = buildMixedHTML(practiceMixed.whole, practiceMixed.num, practiceMixed.den, true); 
+        document.getElementById('practiceAnswer').value=''; 
+        document.getElementById('practiceFeedback').innerHTML=''; 
+        document.getElementById('practiceHint').innerHTML='';
+    }
+    function checkPractice(){
+        let user=parseFloat(document.getElementById('practiceAnswer').value.trim().replace('%',''));
+        let correct = mixedToPercent(practiceMixed.whole, practiceMixed.num, practiceMixed.den);
+        let errorMsg = currentLang==='en'?'⚠️ Enter number like 150':(currentLang==='zh'?'⚠️ 输入数字 如 150':'⚠️ Masukkan nombor seperti 150');
+        if(isNaN(user)){ document.getElementById('practiceFeedback').innerHTML= errorMsg; return; }
+        if(Math.abs(user-correct)<0.01){ addPoints(10); showFloatingMsg(t('correctMsg'),true); document.getElementById('practiceFeedback').innerHTML=`✅ ${t('correctMsg')} +10`; updatePracticeUI();}
+        else{ showFloatingMsg(`${t('wrongMsg')} : ${correct}%`,false); document.getElementById('practiceFeedback').innerHTML=`❌ ${t('wrongMsg')} ${buildMixedHTML(practiceMixed.whole,practiceMixed.num,practiceMixed.den)} = ${correct}%`; 
+        let hintMsg = currentLang==='en'?`${t('hintPrefix')}: ${practiceMixed.whole} whole = ${practiceMixed.whole*100}% + fraction part = ${correct}%`:(currentLang==='zh'?`${t('hintPrefix')}: ${practiceMixed.whole} 个整数 = ${practiceMixed.whole*100}% + 分数部分 = ${correct}%`:`${t('hintPrefix')}: ${practiceMixed.whole} bulat = ${practiceMixed.whole*100}% + bahagian pecahan = ${correct}%`);
+        document.getElementById('practiceHint').innerHTML = hintMsg;}
+    }
+    document.getElementById('checkPracticeBtn').addEventListener('click',checkPractice);
+    document.getElementById('nextPracticeBtn').addEventListener('click',updatePracticeUI);
+
+    // 挑战模式得分记录
+    let latestChallengeScore = localStorage.getItem("latestChallengeScore") || 0;
+    document.getElementById('latestChallengeScore').innerText = latestChallengeScore;
+    
+    document.getElementById('recordChallengeScoreBtn').addEventListener('click', () => {
+        let promptMsg = currentLang==='en' ? "Enter your score from the ZEP Quiz (0-100):" : (currentLang==='zh' ? "请输入您在 ZEP Quiz 中获得的分数 (0-100):" : "Masukkan markah anda dari ZEP Quiz (0-100):");
+        let scoreInput = prompt(promptMsg, "80");
+        if(scoreInput !== null){
+            let score = parseInt(scoreInput);
+            let errorMsg = currentLang==='en' ? '❌ Please enter a number between 0-100' : (currentLang==='zh' ? '❌ 请输入 0-100 之间的数字' : '❌ Sila masukkan nombor antara 0-100');
+            let successMsg = currentLang==='en' ? `✅ Recorded! +${score} points added!` : (currentLang==='zh' ? `✅ 已记录！获得 +${score} 分！` : `✅ Direkod! +${score} mata ditambah!`);
+            if(!isNaN(score) && score >= 0 && score <= 100){
+                addPoints(score);
+                localStorage.setItem("latestChallengeScore", score);
+                document.getElementById('latestChallengeScore').innerText = score;
+                document.getElementById('challengeScoreFeedback').innerHTML = successMsg;
+                setTimeout(()=>{ document.getElementById('challengeScoreFeedback').innerHTML = ''; }, 3000);
+            } else {
+                document.getElementById('challengeScoreFeedback').innerHTML = errorMsg;
+            }
+        }
+    });
+
+    // 测验模块
+    let quizQuestions=[], quizUserAnswers=[], quizCurrentIdx=0, quizStarted=false, quizHistory=JSON.parse(localStorage.getItem("mixedQuizHistory")) || [];
+    function generateQuiz(){ 
+        let qs=[]; 
+        for(let i=0;i<5;i++){ 
+            let whole=Math.floor(Math.random()*3)+1; 
+            let den=goodDenominators[Math.floor(Math.random()*goodDenominators.length)]; 
+            let num=Math.floor(Math.random()*(den-1))+1; 
+            if(num<1) num=1; 
+            qs.push({whole, num, den, correct:mixedToPercent(whole,num,den)}); 
+        } 
+        return qs; 
+    }
+    function renderQuizQuestion(){ 
+        let q=quizQuestions[quizCurrentIdx]; 
+        document.getElementById('quizQuestionText').innerHTML = buildMixedHTML(q.whole, q.num, q.den, true); 
+        document.getElementById('quizAnswer').value=''; 
+        document.getElementById('quizFeedback').innerHTML=''; 
+        let qPrefix = currentLang==='en'?'Question':(currentLang==='zh'?'第':'Soalan');
+        document.getElementById('quizQPrefix').innerHTML = `${qPrefix} ${quizCurrentIdx+1} / 5`; 
+    }
+    function finishQuiz(){
+        let total=0, details=[];
+        for(let i=0;i<quizQuestions.length;i++){ 
+            let q=quizQuestions[i]; 
+            let userVal=quizUserAnswers[i]; 
+            let isCorrect=(Math.abs(userVal - q.correct)<0.01); 
+            if(isCorrect) total+=10; 
+            details.push({mixed:`${q.whole} ${q.num}/${q.den}`, userAnswer:userVal, correctAnswer:q.correct, isCorrect}); 
+        }
+        let record = { timestamp: new Date().toLocaleString(), score:total, details:details };
+        quizHistory.unshift(record); 
+        localStorage.setItem("mixedQuizHistory", JSON.stringify(quizHistory));
+        displayQuizReport(record);
+        document.getElementById('quizPanel').style.display='none'; 
+        document.getElementById('quizReportArea').style.display='block'; 
+        document.getElementById('quizSetupPanel').style.display='block'; 
+        quizStarted=false;
+        updateTeacherLogDisplay();
+        addPoints(total);
+    }
+    function displayQuizReport(record){
+        let reportTitle = currentLang==='en'?'Quiz Report':(currentLang==='zh'?'测验报告':'Laporan Kuiz');
+        let html=`<div class="quiz-report"><h3>📋 ${reportTitle} (${record.timestamp})</h3><table class="quiz-table"><thead><tr><th>Mixed Number</th><th>Your Answer</th><th>Correct</th><th>Result</th></tr></thead><tbody>`;
+        record.details.forEach(d=>{ 
+            html+=`<tr class="${d.isCorrect?'correct-ans':'wrong-ans'}"><td>${d.mixed}</td><td>${d.userAnswer}%</td><td>${d.correctAnswer}%</td><td>${d.isCorrect?'✅':'❌'}</td></tr>`; 
+        });
+        html+=`</tbody></table><p><strong>Total: ${record.score}/50</strong></p><button id="exportQuizBtn">📎 ${t('exportCSV')}</button></div>`;
+        document.getElementById('quizReportArea').innerHTML = html;
+        document.getElementById('exportQuizBtn')?.addEventListener('click',()=>{ 
+            let csv=[["Mixed Number","YourAnswer%","CorrectAnswer%","Result"]]; 
+            record.details.forEach(d=>{ csv.push([d.mixed, d.userAnswer+"%", d.correctAnswer+"%", d.isCorrect?"Correct":"Wrong"]); }); 
+            let blob=new Blob(["\uFEFF"+csv.map(r=>r.join(",")).join("\n")],{type:"text/csv"}); 
+            let a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`mixed_quiz.csv`; a.click(); URL.revokeObjectURL(a.href); 
+        }); 
+    }
+    function startQuiz(){ 
+        quizQuestions = generateQuiz(); 
+        quizUserAnswers = new Array(5).fill(null); 
+        quizCurrentIdx=0; quizStarted=true; 
+        document.getElementById('quizSetupPanel').style.display='none'; 
+        document.getElementById('quizPanel').style.display='block'; 
+        document.getElementById('quizReportArea').style.display='none'; 
+        renderQuizQuestion(); 
+    }
+    function submitQuizAnswer(){ 
+        if(!quizStarted) return; 
+        let userVal=parseFloat(document.getElementById('quizAnswer').value.trim().replace('%','')); 
+        let errorMsg = currentLang==='en'?'Enter a number':(currentLang==='zh'?'请输入数字':'Sila masukkan nombor');
+        if(isNaN(userVal)){ document.getElementById('quizFeedback').innerHTML=errorMsg; return; } 
+        quizUserAnswers[quizCurrentIdx] = userVal; 
+        if(quizCurrentIdx+1 < quizQuestions.length){ quizCurrentIdx++; renderQuizQuestion(); } 
+        else { finishQuiz(); } 
+    }
+    document.getElementById('startQuizBtn').addEventListener('click',startQuiz);
+    document.getElementById('submitQuizBtn').addEventListener('click',submitQuizAnswer);
+
+    // 教师报告
+    function updateTeacherLogDisplay(){
+        let container = document.getElementById('teacherLogArea');
+        let noHistoryMsg = currentLang==='en'?'✨ No quiz history yet':(currentLang==='zh'?'✨ 暂无测验记录':'✨ Tiada rekod kuiz lagi');
+        if(!quizHistory.length){ container.innerHTML=`<p>${noHistoryMsg}</p>`; return; }
+        let html = `<div><table class="quiz-table"><thead><tr><th>Time</th><th>Score</th><th>Details</th></tr></thead><tbody>`;
+        quizHistory.forEach(rec=>{ let detailShort = rec.details.map(d=>`${d.mixed} ${d.isCorrect?'✓':'✗'}`).join(', '); html+=`<tr><td>${rec.timestamp}</td><td>${rec.score}/50</td><td>${detailShort}</td></tr>`; });
+        html+=`</tbody></table><button id="exportAllHistBtn">📎 ${t('exportCSV')} (ALL)</button></div>`;
+        container.innerHTML = html;
+        document.getElementById('exportAllHistBtn')?.addEventListener('click',()=>{ 
+            let csv=[["Time","Score","Details"]]; 
+            quizHistory.forEach(rec=>{ let detail=rec.details.map(d=>`${d.mixed}:${d.isCorrect?'correct':'wrong'}`).join(";"); csv.push([rec.timestamp, rec.score, detail]); }); 
+            let blob=new Blob(["\uFEFF"+csv.map(r=>r.join(",")).join("\n")],{type:"text/csv"}); 
+            let a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`mixed_history.csv`; a.click(); URL.revokeObjectURL(a.href); 
+        }); 
+    }
+    document.getElementById('clearHistoryBtn').addEventListener('click',()=>{ 
+        let confirmMsg = currentLang==='en'?'Clear all quiz history?':(currentLang==='zh'?'清除所有测验记录？':'Padam semua rekod kuiz?');
+        if(confirm(confirmMsg)){ 
+            quizHistory=[]; localStorage.removeItem("mixedQuizHistory"); updateTeacherLogDisplay(); 
+        } 
+    });
+
+    // 切换标签页
+    document.querySelectorAll('.tab-btn').forEach(btn=>{ 
+        btn.addEventListener('click',()=>{ 
+            let tab=btn.dataset.tab; 
+            document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active')); 
+            btn.classList.add('active'); 
+            document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active')); 
+            document.getElementById(tab+'Tab').classList.add('active'); 
+            if(tab==='teacher') updateTeacherLogDisplay(); 
+        }); 
+    });
+    
+    // 初始化
+    buildMixedBtns(); setMixed(1,1,2); updatePracticeUI(); updateScoreUI(); updateUIText(); 
+    // 设置默认激活BM语言按钮
+    document.querySelector('.lang-btn[data-lang="ms"]').classList.add('active');
+    for(let i=0;i<100;i++){ 
+        let s=document.createElement('div'); s.className='star'; 
+        s.style.left=Math.random()*100+'%'; s.style.top=Math.random()*100+'%'; 
+        s.style.width=Math.random()*3+1+'px'; s.style.height=s.style.width; 
+        s.style.animationDuration=Math.random()*2+1+'s'; 
+        document.getElementById('stars').appendChild(s); 
+    }
+</script>
+</body>
+</html>
