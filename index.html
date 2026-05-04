@@ -213,12 +213,10 @@
 </div>
 
 <script>
-    // ----------------------------- 多语言字典 (EN, ZH, MS) - 包含标签页文字 ---------------------------------
+    // ----------------------------- 多语言字典 -----------------------------
     const langData = {
         en: { 
-            // 标签页按钮
             tabLearn:"📖 LEARN", tabPractice:"✏️ PRACTICE", tabChallenge:"⚡ CHALLENGE", tabQuiz:"📝 QUIZ", tabTeacher:"📊 REPORT",
-            // 其他文字
             scoreLabel:"SCORE", levelLabel:"LEVEL", mainTitle:"Mixed Number → Percent Lab",
             learnSubtitle:"📌 Click a mixed number or type your own:", circleTitle:"🥧 Circle Chart (each whole = 100%)",
             gridTitle:"📊 100‑Square Grid (1% each)", 
@@ -229,7 +227,7 @@
             correctMsg:"Correct!", wrongMsg:"Wrong", hintPrefix:"Hint", nextBtn:"NEXT QUESTION",
             checkBtn:"CHECK", submitBtn:"SUBMIT", convertBtn:"CONVERT", exportCSV:"📎 Export CSV",
             recordScore:"✨ Record My Score ✨", startQuiz:"📋 START QUIZ", clearHistory:"🗑️ CLEAR HISTORY",
-            step1:"Step 1", step2:"Step 2", whole:"whole", practicePlaceholder:"e.g., 150", quizPlaceholder:"percent"
+            practicePlaceholder:"e.g., 150", quizPlaceholder:"percent"
         },
         zh: { 
             tabLearn:"📖 竖式学习", tabPractice:"✏️ 练一练", tabChallenge:"⚡ 挑战赛", tabQuiz:"📝 随堂测验", tabTeacher:"📊 老师报告",
@@ -243,7 +241,7 @@
             correctMsg:"✓ 正确！", wrongMsg:"✗ 错误", hintPrefix:"💡 提示", nextBtn:"🎲 下一题",
             checkBtn:"✅ 批改", submitBtn:"✅ 提交", convertBtn:"➡️ 转换", exportCSV:"📎 导出报告 (CSV)",
             recordScore:"✨ 记录我的分数 ✨", startQuiz:"📋 开始测验", clearHistory:"🗑️ 清除历史",
-            step1:"步骤 1", step2:"步骤 2", whole:"个整数", practicePlaceholder:"如 150", quizPlaceholder:"百分比"
+            practicePlaceholder:"如 150", quizPlaceholder:"百分比"
         },
         ms: { 
             tabLearn:"📖 BELAJAR", tabPractice:"✏️ LATIHAN", tabChallenge:"⚡ CABARAN", tabQuiz:"📝 KUIZ", tabTeacher:"📊 LAPORAN",
@@ -257,21 +255,18 @@
             correctMsg:"✓ Betul!", wrongMsg:"✗ Salah", hintPrefix:"💡 Petunjuk", nextBtn:"🎲 SOALAN SETERUSNYA",
             checkBtn:"✅ SEMAK", submitBtn:"✅ HANTAR", convertBtn:"➡️ TUKAR", exportCSV:"📎 Eksport CSV",
             recordScore:"✨ Rekod Markah Saya ✨", startQuiz:"📋 MULAKAN KUIZ", clearHistory:"🗑️ PADAM SEJARAH",
-            step1:"Langkah 1", step2:"Langkah 2", whole:"bulat", practicePlaceholder:"cth., 150", quizPlaceholder:"peratus"
+            practicePlaceholder:"cth., 150", quizPlaceholder:"peratus"
         }
     };
-    let currentLang = 'ms';  // 默认马来文
+    let currentLang = 'ms';
     function t(key){ return langData[currentLang][key] || langData['en'][key]; }
     
     function updateUIText(){
-        // 更新标签页按钮 (最重要!)
         document.getElementById('tabLearnBtn').innerHTML = t('tabLearn');
         document.getElementById('tabPracticeBtn').innerHTML = t('tabPractice');
         document.getElementById('tabChallengeBtn').innerHTML = t('tabChallenge');
         document.getElementById('tabQuizBtn').innerHTML = t('tabQuiz');
         document.getElementById('tabTeacherBtn').innerHTML = t('tabTeacher');
-        
-        // 更新其他界面元素
         document.getElementById('scoreLabel').innerText = t('scoreLabel');
         document.getElementById('levelLabel').innerText = t('levelLabel');
         document.getElementById('mainTitle').innerText = t('mainTitle');
@@ -291,18 +286,13 @@
         document.getElementById('startQuizBtn').innerText = t('startQuiz');
         document.getElementById('clearHistoryBtn').innerText = t('clearHistory');
         document.getElementById('recordChallengeScoreBtn').innerText = t('recordScore');
-        
-        // 更新输入框占位符
         document.getElementById('practiceAnswer').placeholder = t('practicePlaceholder');
         document.getElementById('quizAnswer').placeholder = t('quizPlaceholder');
-        
-        // 更新当前活动页面的内容
         if(document.getElementById('learnTab').classList.contains('active')) updateLearn();
         if(document.getElementById('practiceTab').classList.contains('active')) updatePracticeUI();
         updateTeacherLogDisplay();
     }
     
-    // 语言切换事件
     document.querySelectorAll('.lang-btn').forEach(btn=>{ 
         btn.addEventListener('click',()=>{
             document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));
@@ -333,7 +323,6 @@
         setTimeout(()=>d.remove(),900);
     }
 
-    // 构建竖式分数HTML
     function buildFractionHTML(num, den, className="fraction-v"){ 
         return `<span class="${className}"><span class="num">${num}</span><span class="den">${den}</span></span>`; 
     }
@@ -393,8 +382,27 @@
         document.getElementById('customDen').value=den; 
     }
 
-    // 预设带分数（有限小数分母）
-    const mixedPresets = [[1,1,2],[1,1,4],[2,3,4],[1,1,5],[2,2,5],[1,1,8],[2,7,8],[1,1,10],[3,3,10],[2,1,2],[3,1,4],[1,3,5],[1,3,8],[2,3,5]];
+    // ---------- 预设带分数 (只使用 2,4,5,10 分母，确保百分比为整数) ----------
+    // 分母2: 1/2 = 50%
+    // 分母4: 1/4=25%, 3/4=75%
+    // 分母5: 1/5=20%, 2/5=40%, 3/5=60%, 4/5=80%
+    // 分母10: 1/10=10%, 3/10=30%, 7/10=70%, 9/10=90%
+    const mixedPresets = [
+        [1,1,2],   // 1½ = 150%
+        [1,1,4],   // 1¼ = 125%
+        [2,3,4],   // 2¾ = 275%
+        [1,1,5],   // 1⅕ = 120%
+        [2,2,5],   // 2⅖ = 240%
+        [1,1,10],  // 1⅒ = 110%
+        [3,3,10],  // 3⅗ = 360%
+        [2,1,2],   // 2½ = 250%
+        [3,1,4],   // 3¼ = 325%
+        [1,3,5],   // 1⅗ = 160%
+        [2,3,5],   // 2⅗ = 260%
+        [1,7,10],  // 1⁷⁄₁₀ = 170%
+        [2,9,10],  // 2⁹⁄₁₀ = 290%
+        [1,3,4]    // 1¾ = 175%
+    ];
     function buildMixedBtns(){ 
         let html=''; 
         mixedPresets.forEach(([w,n,d])=>{ 
@@ -409,16 +417,20 @@
         let w=parseInt(document.getElementById('customWhole').value)||1; 
         let n=parseInt(document.getElementById('customNum').value)||1; 
         let d=parseInt(document.getElementById('customDen').value)||1; 
-        if(d<1)d=1; setMixed(w,n,d); 
+        if(d<1)d=1; 
+        // 允许用户输入任何分母，但会提示建议使用2,4,5,10
+        setMixed(w,n,d); 
     });
 
-    // 练习模式 (只使用有限小数分母)
-    const goodDenominators = [2,4,5,8,10];
+    // ---------- 练习/测验题库：只使用分母 2,4,5,10 ----------
+    const goodDenominators = [2,4,5,10];  // 只使用这些分母，确保百分比是整数
     function randomMixed(){ 
-        let whole = Math.floor(Math.random()*3)+1; 
+        let whole = Math.floor(Math.random()*3)+1;  // 1,2,3
         let den = goodDenominators[Math.floor(Math.random()*goodDenominators.length)]; 
-        let num = Math.floor(Math.random()*(den-1))+1; 
-        if(num<1) num=1; if(num>=den) num=den-1; 
+        let maxNum = den-1;
+        let num = Math.floor(Math.random()*maxNum)+1; 
+        if(num<1) num=1; 
+        if(num>=den) num=den-1; 
         return {whole, num, den}; 
     }
     let practiceMixed = {whole:1, num:1, den:2};
@@ -465,7 +477,7 @@
         }
     });
 
-    // 测验模块
+    // 测验模块 (只使用分母 2,4,5,10)
     let quizQuestions=[], quizUserAnswers=[], quizCurrentIdx=0, quizStarted=false, quizHistory=JSON.parse(localStorage.getItem("mixedQuizHistory")) || [];
     function generateQuiz(){ 
         let qs=[]; 
@@ -512,7 +524,7 @@
         record.details.forEach(d=>{ 
             html+=`<tr class="${d.isCorrect?'correct-ans':'wrong-ans'}"><td>${d.mixed}</td><td>${d.userAnswer}%</td><td>${d.correctAnswer}%</td><td>${d.isCorrect?'✅':'❌'}</td></tr>`; 
         });
-        html+=`</tbody></table><p><strong>Total: ${record.score}/50</strong></p><button id="exportQuizBtn">📎 ${t('exportCSV')}</button></div>`;
+        html+=`</tbody><table><p><strong>Total: ${record.score}/50</strong></p><button id="exportQuizBtn">📎 ${t('exportCSV')}</button></div>`;
         document.getElementById('quizReportArea').innerHTML = html;
         document.getElementById('exportQuizBtn')?.addEventListener('click',()=>{ 
             let csv=[["Mixed Number","YourAnswer%","CorrectAnswer%","Result"]]; 
@@ -579,7 +591,6 @@
     
     // 初始化
     buildMixedBtns(); setMixed(1,1,2); updatePracticeUI(); updateScoreUI(); updateUIText(); 
-    // 设置默认激活BM语言按钮
     document.querySelector('.lang-btn[data-lang="ms"]').classList.add('active');
     for(let i=0;i<100;i++){ 
         let s=document.createElement('div'); s.className='star'; 
